@@ -23,6 +23,8 @@ private slots:
     void on_btnStart_clicked();
     void on_btnStop_clicked();
     void on_btnClear_clicked();
+    void on_slSigLevel_sliderMoved(int position);
+    void on_slSigNoise_sliderMoved(int position);
 
 private:
     Ui::MainWindow *ui;

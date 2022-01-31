@@ -40,12 +40,12 @@ void GraphPaint::paintEvent(QPaintEvent *e)
     p.setPen(QPen(Qt::red, 1, Qt::SolidLine, Qt::FlatCap));
     for (const auto &d: _data) {
         x++;
-        p.drawPoint(x, h - static_cast<int>(d.val[0]*h/vmax));
+        p.drawPoint(x, h - 1 - static_cast<int>(d.val[0]*(h-3)/vmax));
     }
 }
 
 void GraphPaint::resizeEvent(QResizeEvent *e)
 {
     Q_UNUSED(e)
-    //qDebug() << "resize: " << this->size().width();
+    _data.resize(this->size().width());
 }

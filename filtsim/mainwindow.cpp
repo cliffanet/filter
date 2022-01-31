@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->chrt->setVMax(ui->slSigLevel->maximum());
+    on_slSigLevel_sliderMoved(0);
+    on_slSigNoise_sliderMoved(0);
 
     tmrSim = new QTimer(this);
     connect(tmrSim, &QTimer::timeout, this, &MainWindow::dataSym);
@@ -45,5 +47,17 @@ void MainWindow::on_btnStop_clicked()
 void MainWindow::on_btnClear_clicked()
 {
     ui->chrt->clear();
+}
+
+
+void MainWindow::on_slSigLevel_sliderMoved(int position)
+{
+    ui->labVSigLevel->setText(QString::number(ui->slSigLevel->value()));
+}
+
+
+void MainWindow::on_slSigNoise_sliderMoved(int position)
+{
+    ui->labVSigNoise->setText(QString::number(ui->slSigNoise->value()));
 }
 

@@ -22,7 +22,7 @@ class ring
     size_type m_head;
     size_type m_tail;
     size_type m_contents_size;
-    const size_type m_array_size;
+    size_type m_array_size;
 public:
 
     ring(size_type size = 8) : m_array(size),
@@ -55,6 +55,7 @@ public:
     size_type capacity() const { return m_array_size; }
     bool empty() const;
     bool full() const;
+    void resize( size_type count );
 
     size_type max_size() const { return size_type(-1) / sizeof(value_type); }
     reference operator[](size_type index);
@@ -226,6 +227,55 @@ inline bool ring<T>::full() const
 {
     if (m_contents_size == m_array_size) return true;
     return false;
+}
+
+template<class T>
+inline void ring<T>::resize(size_type count)
+{
+    assert(count > 1 && "size must be greater than 1");
+    if (count == m_array_size)
+        return;
+
+    if (count < m_array_size) {
+        if (m_contents_size > count)
+            m_contents_size = count;
+        size_type ntail = m_tail < count ? m_tail : count-1;
+        size_type nhead = ntail + 1 + (count-m_contents_size);
+        nhead %= count;
+        size_type ii = m_tail + 1 + (m_array_size-m_contents_size);
+        ii %= m_array_size;
+        size_type io = nhead;
+        size_type sz = m_contents_size;
+        while (sz > 0 && ((io > ntail) || (io != ii))) {
+            m_array[io] = m_array[ii];
+            ii = ii+1 < m_array_size ? ii+1 : 0;
+            io = io+1 < count ? io+1 : 0;
+            sz --;
+        }
+
+        m_head = nhead;
+        m_tail = ntail;
+    }
+
+    m_array.resize(count);
+
+    if (count > m_array_size) {
+        m_tail = m_head+m_contents_size-1;
+        m_tail %= count;
+        if (m_head+m_contents_size > m_array_size) {
+            size_type io = m_array_size;
+            size_type ii = 0;
+            size_type sz = m_head+m_contents_size-m_array_size;
+            while (sz > 0) {
+                m_array[io] = m_array[ii];
+                io = io+1 < count ? io+1 : 0;
+                ii ++;
+                sz --;
+            }
+        }
+    }
+
+    m_array_size = count;
 }
 
 template<class T>
