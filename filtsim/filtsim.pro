@@ -15,7 +15,8 @@ SOURCES += \
 
 HEADERS += \
     graphpaint.h \
-    mainwindow.h
+    mainwindow.h \
+    ../filtlib/ring.h
 
 FORMS += \
     mainwindow.ui
