@@ -14,9 +14,11 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    ../filtlib/filter_avg.h \
+    ../filtlib/ring.h \
+    ../filtlib/filter.h \
     graphpaint.h \
-    mainwindow.h \
-    ../filtlib/ring.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui

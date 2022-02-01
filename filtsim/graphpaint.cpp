@@ -10,9 +10,28 @@ GraphPaint::GraphPaint(QWidget *parent)
 
 }
 
+GraphPaint::~GraphPaint()
+{
+    for (auto &inf : _info)
+        if (inf.filter != nullptr)
+            delete inf.filter;
+}
+
 void GraphPaint::tick(double val, uint32_t tm)
 {
-    _data.push_back({ tm, { val } });
+    pnt_t p = {
+        tm,
+        { val }
+    };
+    for (int id = DataSrc+1; id < DataCount; id++) {
+        auto &inf = _info[id];
+        if (inf.filter != nullptr) {
+            inf.filter->tick(val, tm);
+            p.val[id] = inf.filter->value();
+        }
+    }
+
+    _data.push_back(p);
     update();
 }
 
@@ -43,6 +62,25 @@ void GraphPaint::setDataColor(DataID id, const QColor &color)
 void GraphPaint::setDrawType(DataID id, DrawType type)
 {
     _info[id].draw = type;
+    update();
+}
+
+void GraphPaint::setFilter(DataID id, filtBase *filter)
+{
+    if (id <= DataSrc)
+        return;
+
+    auto &inf = _info[id];
+    if (inf.filter != nullptr)
+        delete inf.filter;
+    inf.filter = filter;
+
+    if (filter != nullptr)
+        for (auto &d : _data) {
+            filter->tick(d.val[DataSrc], d.tdiff);
+            d.val[id] = filter->value();
+        }
+
     update();
 }
 

@@ -249,6 +249,90 @@
           <attribute name="title">
            <string>Среднее арифметическое</string>
           </attribute>
+          <widget class="QLabel" name="labTAvgSize">
+           <property name="geometry">
+            <rect>
+             <x>70</x>
+             <y>150</y>
+             <width>111</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Размер буфера</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QComboBox" name="cmbAvgType">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>60</y>
+             <width>79</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <item>
+            <property name="text">
+             <string>Точки</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Линии</string>
+            </property>
+           </item>
+          </widget>
+          <widget class="QWidget" name="wColAvg" native="true">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>71</width>
+             <height>31</height>
+            </rect>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labVAvgSize">
+           <property name="geometry">
+            <rect>
+             <x>100</x>
+             <y>10</y>
+             <width>51</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>-</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QSlider" name="slAvgSize">
+           <property name="geometry">
+            <rect>
+             <x>110</x>
+             <y>30</y>
+             <width>31</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>2</number>
+           </property>
+           <property name="maximum">
+            <number>50</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
          </widget>
         </widget>
        </item>

@@ -4,6 +4,10 @@
 #include <QWidget>
 
 #include "../filtlib/ring.h"
+#include "../filtlib/filter_avg.h"
+
+typedef FilterBase<double> filtBase;
+typedef FilterAvg<double> filtAvg;
 
 #define GRAPH_PAINT_SRC_COUNT   5
 
@@ -31,9 +35,11 @@ public:
         QString name;
         QColor color;
         DrawType draw = DrawPoint;
+        filtBase *filter = nullptr;
     } hdr_t;
 
     explicit GraphPaint(QWidget *parent = nullptr);
+    ~GraphPaint() override;
 
     void tick(double val, uint32_t tm);
     void clear();
@@ -41,6 +47,7 @@ public:
     void setDataName(DataID id, const QString &name);
     void setDataColor(DataID id, const QColor &color);
     void setDrawType(DataID id, DrawType type);
+    void setFilter(DataID id, filtBase *filter);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
