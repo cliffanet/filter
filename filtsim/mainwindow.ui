@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>794</width>
-    <height>512</height>
+    <width>700</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="GraphPaint" name="chrt">
+     <widget class="GraphPaint" name="chrt" native="true">
       <property name="minimumSize">
        <size>
         <width>300</width>
@@ -29,7 +29,7 @@
      <widget class="QWidget" name="widget" native="true">
       <property name="minimumSize">
        <size>
-        <width>300</width>
+        <width>330</width>
         <height>200</height>
        </size>
       </property>
@@ -39,158 +39,232 @@
         <height>200</height>
        </size>
       </property>
-      <widget class="QSlider" name="slSigLevel">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>20</y>
-         <width>31</width>
-         <height>160</height>
-        </rect>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-       <property name="maximum">
-        <number>1000</number>
+       <property name="topMargin">
+        <number>0</number>
        </property>
-       <property name="value">
-        <number>100</number>
+       <property name="rightMargin">
+        <number>0</number>
        </property>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+       <property name="bottomMargin">
+        <number>0</number>
        </property>
-      </widget>
-      <widget class="QLabel" name="labTSigLevel">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>180</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Сигнал</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="labVSigLevel">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>0</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>-</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="labVSigNoise">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>0</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>-</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QSlider" name="slSigNoise">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>20</y>
-         <width>31</width>
-         <height>160</height>
-        </rect>
-       </property>
-       <property name="value">
-        <number>10</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="labTSigNoise">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>180</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Шум</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="btnStart">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>10</y>
-         <width>91</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Начать</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="btnStop">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>50</y>
-         <width>91</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Остановить</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="btnClear">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>90</y>
-         <width>91</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Очистить</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QWidget" name="widget_2" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QPushButton" name="btnStart">
+            <property name="text">
+             <string>Генерация</string>
+            </property>
+            <property name="default">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnStop">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Остановить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnClear">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Очистить</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tabSignal">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <attribute name="title">
+           <string>Генератор сигнала</string>
+          </attribute>
+          <widget class="QSlider" name="slSigLevel">
+           <property name="geometry">
+            <rect>
+             <x>110</x>
+             <y>30</y>
+             <width>31</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labTSigLevel">
+           <property name="geometry">
+            <rect>
+             <x>100</x>
+             <y>150</y>
+             <width>51</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Сигнал</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labTSigNoise">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>150</y>
+             <width>51</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Шум</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labVSigNoise">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>10</y>
+             <width>51</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>-</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labVSigLevel">
+           <property name="geometry">
+            <rect>
+             <x>100</x>
+             <y>10</y>
+             <width>51</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>-</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QSlider" name="slSigNoise">
+           <property name="geometry">
+            <rect>
+             <x>170</x>
+             <y>30</y>
+             <width>31</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <widget class="QWidget" name="wColSig" native="true">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>71</width>
+             <height>31</height>
+            </rect>
+           </property>
+          </widget>
+          <widget class="QComboBox" name="cmbSigType">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>60</y>
+             <width>79</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <item>
+            <property name="text">
+             <string>Точки</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Линии</string>
+            </property>
+           </item>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="tabAverage">
+          <attribute name="title">
+           <string>Среднее арифметическое</string>
+          </attribute>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GraphPaint</class>
+   <extends>QWidget</extends>
+   <header>graphpaint.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

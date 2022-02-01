@@ -26,6 +26,8 @@ private slots:
     void on_slSigLevel_sliderMoved(int position);
     void on_slSigNoise_sliderMoved(int position);
 
+    void on_cmbSigType_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
 
