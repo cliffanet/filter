@@ -2,6 +2,8 @@
 #include <QPainter>
 #include <QDebug>
 
+#include <cmath>
+
 GraphPaint::GraphPaint(QWidget *parent)
     : QWidget{parent}
 {
@@ -40,12 +42,12 @@ void GraphPaint::paintEvent(QPaintEvent *e)
     p.setPen(QPen(Qt::red, 1, Qt::SolidLine, Qt::FlatCap));
     for (const auto &d: _data) {
         x++;
-        p.drawPoint(x, h - 1 - static_cast<int>(d.val[0]*(h-3)/vmax));
+        p.drawPoint(x, h - 1 - static_cast<int>(std::round(d.val[0]*(h-3)/vmax)));
     }
 }
 
 void GraphPaint::resizeEvent(QResizeEvent *e)
 {
     Q_UNUSED(e)
-    _data.resize(this->size().width());
+    _data.resize(static_cast<uint>(this->size().width()));
 }

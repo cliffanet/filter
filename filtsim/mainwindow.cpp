@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QTimer>
+#include <random>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,7 +25,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::dataSym()
 {
-    ui->chrt->tick(ui->slSigLevel->value(), 0);
+    std::random_device rd{};
+    std::mt19937 gen{rd()};
+    std::normal_distribution<double> d( ui->slSigLevel->value(), ui->slSigNoise->value() );
+    ui->chrt->tick(d(gen), 0);
 }
 
 
