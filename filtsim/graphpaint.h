@@ -6,10 +6,12 @@
 #include "../filtlib/ring.h"
 #include "../filtlib/filter_avg.h"
 #include "../filtlib/filter_avg2.h"
+#include "../filtlib/filter_ltsqrt.h"
 
 typedef FilterBase<double> filtBase;
 typedef FilterAvg<double> filtAvg;
 typedef FilterAvg2<double> filtAvg2;
+typedef FilterLtSqrt<double> filtLtSqrt;
 
 #define GRAPH_PAINT_SRC_COUNT   5
 
@@ -21,6 +23,7 @@ public:
         DataSrc = 0,
         DataAvg,
         DataAvg2,
+        DataLtSqrt,
         DataCount
     } DataID;
 

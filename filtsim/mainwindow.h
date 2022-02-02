@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
     void dataSym();
 
@@ -31,6 +31,8 @@ private slots:
     void on_cmbAvgType_currentIndexChanged(int index);
     void on_slAvg2Size_sliderMoved(int position);
     void on_cmbAvg2Type_currentIndexChanged(int index);
+    void on_slLtSqrtSize_sliderMoved(int position);
+    void on_cmbLtSqrtType_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
