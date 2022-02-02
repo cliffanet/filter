@@ -15,15 +15,18 @@ MainWindow::MainWindow(QWidget *parent)
     on_slSigLevel_sliderMoved(0);
     on_slSigNoise_sliderMoved(0);
     on_slAvgSize_sliderMoved(0);
+    on_slAvg2Size_sliderMoved(0);
 
     ui->wColSig->setStyleSheet("background-color: red;");
     ui->wColAvg->setStyleSheet("background-color: green;");
+    ui->wColAvg2->setStyleSheet("background-color: #8B8000;");
     const QColor sigColor[] = { Qt::red, Qt::green, Qt::darkYellow, Qt::magenta };
     for (auto id = GraphPaint::DataSrc; id < GraphPaint::DataCount; id = static_cast<GraphPaint::DataID>(id+1))
         if ((id >= 0) && (id < sizeof(sigColor)/sizeof(QColor)))
             ui->chrt->setDataColor(id, sigColor[id]);
 
     on_slAvgSize_sliderMoved(0);
+    on_slAvg2Size_sliderMoved(0);
 
     tmrSim = new QTimer(this);
     connect(tmrSim, &QTimer::timeout, this, &MainWindow::dataSym);
@@ -102,6 +105,23 @@ void MainWindow::on_cmbAvgType_currentIndexChanged(int index)
 {
     ui->chrt->setDrawType(
         GraphPaint::DataAvg,
+        index == 1 ?
+            GraphPaint::DrawLine :
+            GraphPaint::DrawPoint
+    );
+}
+
+void MainWindow::on_slAvg2Size_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    ui->labVAvg2Size->setText(QString::number(ui->slAvg2Size->value()));
+    ui->chrt->setFilter(GraphPaint::DataAvg2, new filtAvg2(ui->slAvg2Size->value()));
+}
+
+void MainWindow::on_cmbAvg2Type_currentIndexChanged(int index)
+{
+    ui->chrt->setDrawType(
+        GraphPaint::DataAvg2,
         index == 1 ?
             GraphPaint::DrawLine :
             GraphPaint::DrawPoint

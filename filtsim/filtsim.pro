@@ -15,6 +15,7 @@ SOURCES += \
 
 HEADERS += \
     ../filtlib/filter_avg.h \
+    ../filtlib/filter_avg2.h \
     ../filtlib/ring.h \
     ../filtlib/filter.h \
     graphpaint.h \

@@ -5,9 +5,11 @@
 
 #include "../filtlib/ring.h"
 #include "../filtlib/filter_avg.h"
+#include "../filtlib/filter_avg2.h"
 
 typedef FilterBase<double> filtBase;
 typedef FilterAvg<double> filtAvg;
+typedef FilterAvg2<double> filtAvg2;
 
 #define GRAPH_PAINT_SRC_COUNT   5
 
@@ -18,6 +20,7 @@ public:
     typedef enum {
         DataSrc = 0,
         DataAvg,
+        DataAvg2,
         DataCount
     } DataID;
 

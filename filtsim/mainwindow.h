@@ -28,6 +28,8 @@ private slots:
     void on_cmbSigType_currentIndexChanged(int index);
     void on_slAvgSize_sliderMoved(int position);
     void on_cmbAvgType_currentIndexChanged(int index);
+    void on_slAvg2Size_sliderMoved(int position);
+    void on_cmbAvg2Type_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
