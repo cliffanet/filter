@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QTimer>
+#include <QElapsedTimer>
 #include <random>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -30,11 +31,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     tmrSim = new QTimer(this);
     connect(tmrSim, &QTimer::timeout, this, &MainWindow::dataSym);
+    tmrElaps = new QElapsedTimer;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete tmrElaps;
 }
 
 void MainWindow::dataSym()
@@ -42,7 +45,11 @@ void MainWindow::dataSym()
     std::random_device rd{};
     std::mt19937 gen{rd()};
     std::normal_distribution<double> d( ui->slSigLevel->value(), ui->slSigNoise->value() );
-    ui->chrt->tick(d(gen), 0);
+
+    static qint64 tmprev = 0;
+    auto tmcur = tmrElaps->elapsed();
+    ui->chrt->tick(d(gen), tmcur - tmprev);
+    tmprev = tmcur;
 }
 
 
@@ -50,6 +57,7 @@ void MainWindow::on_btnStart_clicked()
 {
     ui->btnStart->setEnabled(false);
     ui->btnStop->setEnabled(true);
+    tmrElaps->restart();
     tmrSim->start(100);
 }
 

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 class QTimer;
+class QElapsedTimer;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,5 +36,6 @@ private:
     Ui::MainWindow *ui;
 
     QTimer *tmrSim;
+    QElapsedTimer *tmrElaps;
 };
 #endif // MAINWINDOW_H

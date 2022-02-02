@@ -120,6 +120,17 @@ void GraphPaint::paintEvent(QPaintEvent *e)
 
         src++;
     }
+
+    /* отрисовка интервалов времени
+     * позже надо будет сделать это так же опционально на графике,
+     * как и все остальные
+    int x = 0;
+    p.setPen(QPen(Qt::cyan, 1, Qt::SolidLine, Qt::FlatCap));
+    for (const auto &d : _data) {
+        p.drawPoint(x, h-d.tdiff);
+        x++;
+    }
+    */
 }
 
 void GraphPaint::resizeEvent(QResizeEvent *e)
