@@ -23,10 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
     on_slAvg2Size_sliderMoved(0);
     on_slLtSqrtSize_sliderMoved(0);
 
-    ui->wColSig->setStyleSheet("background-color: red;");
-    ui->wColAvg->setStyleSheet("background-color: green;");
-    ui->wColAvg2->setStyleSheet("background-color: #8B8000;");
-    ui->wColLtSqrt->setStyleSheet("background-color: magenta;");
     const QColor sigColor[] = { Qt::red, Qt::green, Qt::darkYellow, Qt::magenta };
     for (auto id = GraphPaint::DataSrc; id < GraphPaint::DataCount; id = static_cast<GraphPaint::DataID>(id+1))
         if ((id >= 0) && (id < sizeof(sigColor)/sizeof(QColor)))
@@ -83,6 +79,12 @@ void MainWindow::on_btnClear_clicked()
 }
 
 
+void MainWindow::on_cbSigVisible_stateChanged(int arg1)
+{
+    ui->chrt->setDataVisible(GraphPaint::DataSrc, ui->cbSigVisible->isChecked());
+}
+
+
 void MainWindow::on_slSigLevel_sliderMoved(int position)
 {
     Q_UNUSED(position)
@@ -107,6 +109,11 @@ void MainWindow::on_cmbSigType_currentIndexChanged(int index)
     );
 }
 
+void MainWindow::on_cbAvgVisible_stateChanged(int arg1)
+{
+    ui->chrt->setDataVisible(GraphPaint::DataAvg, ui->cbAvgVisible->isChecked());
+}
+
 
 void MainWindow::on_slAvgSize_sliderMoved(int position)
 {
@@ -126,6 +133,11 @@ void MainWindow::on_cmbAvgType_currentIndexChanged(int index)
     );
 }
 
+void MainWindow::on_cbAvg2Visible_stateChanged(int arg1)
+{
+    ui->chrt->setDataVisible(GraphPaint::DataAvg2, ui->cbAvg2Visible->isChecked());
+}
+
 void MainWindow::on_slAvg2Size_sliderMoved(int position)
 {
     Q_UNUSED(position)
@@ -141,6 +153,11 @@ void MainWindow::on_cmbAvg2Type_currentIndexChanged(int index)
             GraphPaint::DrawLine :
             GraphPaint::DrawPoint
     );
+}
+
+void MainWindow::on_cbLtSqrtVisible_stateChanged(int arg1)
+{
+    ui->chrt->setDataVisible(GraphPaint::DataLtSqrt, ui->cbLtSqrtVisible->isChecked());
 }
 
 void MainWindow::on_slLtSqrtSize_sliderMoved(int position)

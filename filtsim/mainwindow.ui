@@ -214,21 +214,11 @@
             <enum>Qt::Vertical</enum>
            </property>
           </widget>
-          <widget class="QWidget" name="wColSig" native="true">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>20</y>
-             <width>71</width>
-             <height>31</height>
-            </rect>
-           </property>
-          </widget>
           <widget class="QComboBox" name="cmbSigType">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>60</y>
+             <y>40</y>
              <width>79</width>
              <height>24</height>
             </rect>
@@ -243,6 +233,25 @@
              <string>Линии</string>
             </property>
            </item>
+          </widget>
+          <widget class="QCheckBox" name="cbSigVisible">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>85</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: red;</string>
+           </property>
+           <property name="text">
+            <string>с шумом</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
           </widget>
          </widget>
          <widget class="QWidget" name="tabAverage">
@@ -269,7 +278,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>60</y>
+             <y>40</y>
              <width>79</width>
              <height>24</height>
             </rect>
@@ -287,16 +296,6 @@
              <string>Линии</string>
             </property>
            </item>
-          </widget>
-          <widget class="QWidget" name="wColAvg" native="true">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>20</y>
-             <width>71</width>
-             <height>31</height>
-            </rect>
-           </property>
           </widget>
           <widget class="QLabel" name="labVAvgSize">
            <property name="geometry">
@@ -336,6 +335,22 @@
             <enum>Qt::Vertical</enum>
            </property>
           </widget>
+          <widget class="QCheckBox" name="cbAvgVisible">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>85</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: green;</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
          </widget>
          <widget class="QWidget" name="tabAvg2">
           <attribute name="title">
@@ -361,7 +376,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>60</y>
+             <y>40</y>
              <width>79</width>
              <height>24</height>
             </rect>
@@ -418,14 +433,20 @@
             <enum>Qt::Vertical</enum>
            </property>
           </widget>
-          <widget class="QWidget" name="wColAvg2" native="true">
+          <widget class="QCheckBox" name="cbAvg2Visible">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>20</y>
-             <width>71</width>
-             <height>31</height>
+             <y>10</y>
+             <width>85</width>
+             <height>22</height>
             </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: #8B8000;</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </widget>
@@ -437,7 +458,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>60</y>
+             <y>40</y>
              <width>79</width>
              <height>24</height>
             </rect>
@@ -518,6 +539,22 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="cbLtSqrtVisible">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>85</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: magenta;</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </widget>

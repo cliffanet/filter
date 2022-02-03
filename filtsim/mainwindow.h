@@ -24,13 +24,17 @@ private slots:
     void on_btnStart_clicked();
     void on_btnStop_clicked();
     void on_btnClear_clicked();
+    void on_cbSigVisible_stateChanged(int arg1);
     void on_slSigLevel_sliderMoved(int position);
     void on_slSigNoise_sliderMoved(int position);
     void on_cmbSigType_currentIndexChanged(int index);
+    void on_cbAvgVisible_stateChanged(int arg1);
     void on_slAvgSize_sliderMoved(int position);
     void on_cmbAvgType_currentIndexChanged(int index);
+    void on_cbAvg2Visible_stateChanged(int arg1);
     void on_slAvg2Size_sliderMoved(int position);
     void on_cmbAvg2Type_currentIndexChanged(int index);
+    void on_cbLtSqrtVisible_stateChanged(int arg1);
     void on_slLtSqrtSize_sliderMoved(int position);
     void on_cmbLtSqrtType_currentIndexChanged(int index);
 

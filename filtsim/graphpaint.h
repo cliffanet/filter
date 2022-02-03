@@ -40,6 +40,7 @@ public:
     typedef struct ghdr {
         QString name;
         QColor color;
+        bool    visible = true;
         DrawType draw = DrawPoint;
         filtBase *filter = nullptr;
     } hdr_t;
@@ -52,6 +53,7 @@ public:
     void setVMax(double val);
     void setDataName(DataID id, const QString &name);
     void setDataColor(DataID id, const QColor &color);
+    void setDataVisible(DataID id, bool visible);
     void setDrawType(DataID id, DrawType type);
     void setFilter(DataID id, filtBase *filter);
 

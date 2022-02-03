@@ -59,6 +59,12 @@ void GraphPaint::setDataColor(DataID id, const QColor &color)
     update();
 }
 
+void GraphPaint::setDataVisible(DataID id, bool visible)
+{
+    _info[id].visible = visible;
+    update();
+}
+
 void GraphPaint::setDrawType(DataID id, DrawType type)
 {
     _info[id].draw = type;
@@ -97,6 +103,11 @@ void GraphPaint::paintEvent(QPaintEvent *e)
     int src = 0;
     for (const auto &inf: _info) {
         int x = 0;
+
+        if (!inf.visible) {
+            src++;
+            continue;
+        }
 
         p.setPen(QPen(inf.color, 1, Qt::SolidLine, Qt::FlatCap));
  #define y_calc(val) h - 1 - static_cast<int>(std::round((val)*(h-3)/vmax))
