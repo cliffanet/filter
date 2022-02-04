@@ -101,6 +101,39 @@ void GraphPaint::setFilter(DataID id, filtBase *filter)
     update();
 }
 
+void GraphPaint::setOffset(int x, int y)
+{
+    offset_x = x;
+    offset_y = y;
+    update();
+}
+
+void GraphPaint::setScale(uint x, uint y, int fix_x, int fix_y)
+{
+    if (fix_x < 0)
+        fix_x += size().width();
+    int fix_ind1 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
+    if (fix_y < 0)
+        fix_y += size().height();
+    int fix_val1 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
+
+    scale_x = x;
+    scale_y = y;
+
+    int fix_ind2 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
+    if (fix_ind1 != fix_ind2) {
+        offset_x -= fix_ind2 - fix_ind1;
+        emit offsetXChanged(offset_x);
+    }
+    int fix_val2 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
+    if (fix_val1 != fix_val2) {
+        offset_y -= fix_val2 - fix_val1;
+        emit offsetYChanged(offset_y);
+    }
+
+    update();
+}
+
 void GraphPaint::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
@@ -111,39 +144,35 @@ void GraphPaint::paintEvent(QPaintEvent *e)
     QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
     p.drawRect(rect);
 
-    int ibeg = static_cast<int>(_data.size());
-    if (ibeg > this->size().width())
-        ibeg -= this->size().width();
-    else
+    int ibeg = x2index(0);
+    if (ibeg < 0)
         ibeg = 0;
 
     int src = 0;
     for (const auto &inf: _info) {
-        int x = 0;
-
         if (!inf.visible) {
             src++;
             continue;
         }
 
+        int index = ibeg;
+
         p.setPen(QPen(inf.color, 1, Qt::SolidLine, Qt::FlatCap));
- #define y_calc(val) h - 1 - static_cast<int>(std::round((val)*(h-3)/vmax))
-        QPoint prv(x, y_calc(_data[0].val[src]));
+        QPoint prv(index2x(index), static_cast<int>(std::round(value2y(_data[0].val[src]))));
 
         for (auto di = _data.begin()+ibeg; di != _data.end(); di++) {
-            int y = y_calc(di->val[src]);
+            QPoint pnt(index2x(index), static_cast<int>(std::round(value2y(di->val[src]))));
             switch (inf.draw) {
                 case DrawPoint:
-                    p.drawPoint(x, y);
+                    p.drawPoint(pnt);
                     break;
-                case DrawLine: {
-                    QPoint nxt(x, y);
-                    p.drawLine(prv, nxt);
-                    prv = nxt;
-                }
+                case DrawLine:
+                    p.drawLine(prv, pnt);
+                    prv = pnt;
+                    break;
             }
 
-            x++;
+            index++;
         }
 
         src++;

@@ -33,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
     on_slAvg2Size_sliderMoved(0);
     on_slLtSqrtSize_sliderMoved(0);
 
+    on_btnViewReset_clicked();
+    connect(ui->chrt, &GraphPaint::offsetXChanged, this, &MainWindow::changeXOffset);
+    connect(ui->chrt, &GraphPaint::offsetYChanged, this, &MainWindow::changeYOffset);
+
     tmrSim = new QTimer(this);
     connect(tmrSim, &QTimer::timeout, this, &MainWindow::dataSym);
     tmrElaps = new QElapsedTimer;
@@ -57,7 +61,6 @@ void MainWindow::dataSym()
     tmprev = tmcur;
 }
 
-
 void MainWindow::on_btnStart_clicked()
 {
     ui->btnStart->setEnabled(false);
@@ -66,7 +69,6 @@ void MainWindow::on_btnStart_clicked()
     tmrSim->start(100);
 }
 
-
 void MainWindow::on_btnStop_clicked()
 {
     ui->btnStop->setEnabled(false);
@@ -74,12 +76,10 @@ void MainWindow::on_btnStop_clicked()
     tmrSim->stop();
 }
 
-
 void MainWindow::on_btnClear_clicked()
 {
     ui->chrt->clear();
 }
-
 
 void MainWindow::on_cbSigVisible_stateChanged(int arg1)
 {
@@ -93,13 +93,11 @@ void MainWindow::on_slSigLevel_sliderMoved(int position)
     ui->labVSigLevel->setText(QString::number(ui->slSigLevel->value()));
 }
 
-
 void MainWindow::on_slSigNoise_sliderMoved(int position)
 {
     Q_UNUSED(position)
     ui->labVSigNoise->setText(QString::number(ui->slSigNoise->value()));
 }
-
 
 void MainWindow::on_cmbSigType_currentIndexChanged(int index)
 {
@@ -130,6 +128,7 @@ void MainWindow::on_slBufSize_sliderMoved(int position)
 {
     Q_UNUSED(position)
     ui->labVBufSize->setText(QString::number(ui->slBufSize->value()));
+    ui->slOffsetX->setMinimum(-1 * ui->slBufSize->value());
     ui->chrt->setDataSize(static_cast<size_t>(ui->slBufSize->value()));
 }
 
@@ -138,14 +137,12 @@ void MainWindow::on_cbAvgVisible_stateChanged(int arg1)
     ui->chrt->setDataVisible(GraphPaint::DataAvg, ui->cbAvgVisible->isChecked());
 }
 
-
 void MainWindow::on_slAvgSize_sliderMoved(int position)
 {
     Q_UNUSED(position)
     ui->labVAvgSize->setText(QString::number(ui->slAvgSize->value()));
     ui->chrt->setFilter(GraphPaint::DataAvg, new filtAvg(ui->slAvgSize->value()));
 }
-
 
 void MainWindow::on_cmbAvgType_currentIndexChanged(int index)
 {
@@ -198,6 +195,78 @@ void MainWindow::on_cmbLtSqrtType_currentIndexChanged(int index)
         index == 1 ?
             GraphPaint::DrawLine :
             GraphPaint::DrawPoint
+    );
+}
+
+void MainWindow::on_slOffsetX_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    updateViewOffset();
+}
+
+void MainWindow::on_slOffsetY_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    updateViewOffset();
+}
+
+void MainWindow::on_slScaleX_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    updateViewScale();
+}
+
+void MainWindow::on_slScaleY_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    updateViewScale();
+}
+
+void MainWindow::on_btnViewReset_clicked()
+{
+    ui->slScaleX->setValue(100);
+    ui->slScaleY->setValue(100);
+    updateViewScale();
+    ui->slOffsetX->setValue(0);
+    ui->slOffsetY->setValue(0);
+    updateViewOffset();
+}
+
+void MainWindow::changeXOffset(int x)
+{
+    ui->slOffsetX->setValue(x);
+    updateViewOffset(false);
+}
+
+void MainWindow::changeYOffset(int y)
+{
+    ui->slOffsetY->setValue(y);
+    updateViewOffset(false);
+}
+
+void MainWindow::updateViewOffset(bool updchrt)
+{
+    ui->labVOffset->setText(
+        QString::number(ui->slOffsetX->value()) +
+        " x " +
+        QString::number(ui->slOffsetY->value())
+    );
+    if (updchrt)
+        ui->chrt->setOffset(ui->slOffsetX->value(), ui->slOffsetY->value());
+}
+
+void MainWindow::updateViewScale()
+{
+    ui->labVScale->setText(
+        QString::number(ui->slScaleX->value()) +
+        " x " +
+        QString::number(ui->slScaleY->value())
+    );
+    ui->chrt->setScale(
+        ui->slScaleX->value(),
+        ui->slScaleY->value(),
+        -1,
+        ui->chrt->size().height()/2
     );
 }
 

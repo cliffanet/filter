@@ -363,6 +363,171 @@
           <attribute name="title">
            <string>Отображение</string>
           </attribute>
+          <widget class="QSlider" name="slOffsetX">
+           <property name="geometry">
+            <rect>
+             <x>50</x>
+             <y>10</y>
+             <width>211</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>-2000</number>
+           </property>
+           <property name="maximum">
+            <number>0</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>200</number>
+           </property>
+          </widget>
+          <widget class="QSlider" name="slOffsetY">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>31</width>
+             <height>151</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>-2000</number>
+           </property>
+           <property name="maximum">
+            <number>2000</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>500</number>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labTOffset">
+           <property name="geometry">
+            <rect>
+             <x>50</x>
+             <y>50</y>
+             <width>81</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Смещение:</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labVOffset">
+           <property name="geometry">
+            <rect>
+             <x>140</x>
+             <y>50</y>
+             <width>121</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>-</string>
+           </property>
+          </widget>
+          <widget class="QSlider" name="slScaleY">
+           <property name="geometry">
+            <rect>
+             <x>270</x>
+             <y>10</y>
+             <width>31</width>
+             <height>151</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>3000</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>500</number>
+           </property>
+          </widget>
+          <widget class="QSlider" name="slScaleX">
+           <property name="geometry">
+            <rect>
+             <x>50</x>
+             <y>130</y>
+             <width>211</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>3000</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>500</number>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labTScale">
+           <property name="geometry">
+            <rect>
+             <x>100</x>
+             <y>110</y>
+             <width>71</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Масштаб:</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labVScale">
+           <property name="geometry">
+            <rect>
+             <x>170</x>
+             <y>110</y>
+             <width>91</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>-</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="btnViewReset">
+           <property name="geometry">
+            <rect>
+             <x>120</x>
+             <y>70</y>
+             <width>80</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Сбросить</string>
+           </property>
+          </widget>
          </widget>
          <widget class="QWidget" name="tabAverage">
           <attribute name="title">
@@ -562,7 +727,7 @@
          </widget>
          <widget class="QWidget" name="tabLtSqrt">
           <attribute name="title">
-           <string>Метод наименьших квадраты</string>
+           <string>Метод наименьших квадратов</string>
           </attribute>
           <widget class="QComboBox" name="cmbLtSqrtType">
            <property name="geometry">

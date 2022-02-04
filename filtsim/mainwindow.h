@@ -41,10 +41,21 @@ private slots:
     void on_slLtSqrtSize_sliderMoved(int position);
     void on_cmbLtSqrtType_currentIndexChanged(int index);
 
+    void on_slOffsetX_sliderMoved(int position);
+    void on_slOffsetY_sliderMoved(int position);
+    void on_slScaleX_sliderMoved(int position);
+    void on_slScaleY_sliderMoved(int position);
+    void on_btnViewReset_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     QTimer *tmrSim;
     QElapsedTimer *tmrElaps;
+
+    void changeXOffset(int x);
+    void changeYOffset(int y);
+    void updateViewOffset(bool updchrt = true);
+    void updateViewScale();
 };
 #endif // MAINWINDOW_H

@@ -60,6 +60,13 @@ public:
     void setDrawType(DataID id, DrawType type);
     void setFilter(DataID id, filtBase *filter);
 
+    void setOffset(int x, int y);
+    void setScale(uint x, uint y, int fix_x = -1, int fix_y = -1);
+
+signals:
+    void offsetXChanged(int newValue);
+    void offsetYChanged(int newValue);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -68,6 +75,39 @@ private:
     uint32_t dcur = 0;
     double vmax = 0;
     ring <pnt_t>_data;
+    int offset_x = 0, offset_y = 0;
+    uint scale_x = 1, scale_y = 1;
+
+    template <typename T>
+    inline T index2x(T index) {
+        return
+            static_cast<T>(size().width()) -
+            (
+                (static_cast<T>(_data.size()) + static_cast<T>(offset_x) - static_cast<T>(index)) *
+                    static_cast<T>(scale_x) / 100
+            );
+    }
+
+    template <typename T>
+    inline T x2index(T x) {
+        return
+            static_cast<T>(_data.size()) + static_cast<T>(offset_x) -
+            ((static_cast<T>(size().width()) - x) * 100 / static_cast<T>(scale_x));
+    }
+
+    template <typename T>
+    inline T value2y(T value) {
+        return
+            static_cast<T>(size().height()) -
+            ((value - static_cast<T>(offset_y)) * static_cast<T>(scale_y) / 100);
+    }
+
+    template <typename T>
+    inline T y2value(T y) {
+        return
+            (static_cast<T>(size().height()) - y) * 100 / static_cast<T>(scale_y) +
+            static_cast<T>(offset_y);
+    }
 };
 
 #endif // GRAPHPAINT_H
