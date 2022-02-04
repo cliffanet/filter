@@ -24,7 +24,7 @@ class FilterAvg : public FilterBase<T>
     ring<data_t> m_data;
 
 public:
-    FilterAvg(size_type size = 8) :
+    FilterAvg(size_type size = 10) :
         m_data(size)
     { }
 

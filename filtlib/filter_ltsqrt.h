@@ -26,7 +26,7 @@ class FilterLtSqrt : public FilterBase<T>
     ring<data_t> m_data;
 
 public:
-    FilterLtSqrt(size_type size = 8) :
+    FilterLtSqrt(size_type size = 10) :
         m_data(size)
     { }
 
