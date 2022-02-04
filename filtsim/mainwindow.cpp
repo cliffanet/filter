@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     on_cmbLtSqrtType_currentIndexChanged(ui->cmbLtSqrtType->currentIndex());
     on_slSigLevel_sliderMoved(0);
     on_slSigNoise_sliderMoved(0);
+    on_slBufSize_sliderMoved(0);
     on_slAvgSize_sliderMoved(0);
     on_slAvg2Size_sliderMoved(0);
     on_slLtSqrtSize_sliderMoved(0);
@@ -123,6 +124,13 @@ void MainWindow::on_cmbTrueType_currentIndexChanged(int index)
             GraphPaint::DrawLine :
             GraphPaint::DrawPoint
     );
+}
+
+void MainWindow::on_slBufSize_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    ui->labVBufSize->setText(QString::number(ui->slBufSize->value()));
+    ui->chrt->setDataSize(static_cast<size_t>(ui->slBufSize->value()));
 }
 
 void MainWindow::on_cbAvgVisible_stateChanged(int arg1)

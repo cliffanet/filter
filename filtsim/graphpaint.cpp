@@ -52,6 +52,12 @@ void GraphPaint::setVMax(double val)
     update();
 }
 
+void GraphPaint::setDataSize(size_t size)
+{
+    _data.resize(size);
+    update();
+}
+
 void GraphPaint::setDataName(DataID id, const QString &name)
 {
     _info[id].name = name;
@@ -105,6 +111,12 @@ void GraphPaint::paintEvent(QPaintEvent *e)
     QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
     p.drawRect(rect);
 
+    int ibeg = static_cast<int>(_data.size());
+    if (ibeg > this->size().width())
+        ibeg -= this->size().width();
+    else
+        ibeg = 0;
+
     int src = 0;
     for (const auto &inf: _info) {
         int x = 0;
@@ -118,8 +130,8 @@ void GraphPaint::paintEvent(QPaintEvent *e)
  #define y_calc(val) h - 1 - static_cast<int>(std::round((val)*(h-3)/vmax))
         QPoint prv(x, y_calc(_data[0].val[src]));
 
-        for (const auto &d : _data) {
-            int y = y_calc(d.val[src]);
+        for (auto di = _data.begin()+ibeg; di != _data.end(); di++) {
+            int y = y_calc(di->val[src]);
             switch (inf.draw) {
                 case DrawPoint:
                     p.drawPoint(x, y);
@@ -147,10 +159,4 @@ void GraphPaint::paintEvent(QPaintEvent *e)
         x++;
     }
     */
-}
-
-void GraphPaint::resizeEvent(QResizeEvent *e)
-{
-    Q_UNUSED(e)
-    _data.resize(static_cast<uint>(this->size().width()));
 }

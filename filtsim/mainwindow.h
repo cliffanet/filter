@@ -30,6 +30,7 @@ private slots:
     void on_cmbSigType_currentIndexChanged(int index);
     void on_cbTrueVisible_stateChanged(int arg1);
     void on_cmbTrueType_currentIndexChanged(int index);
+    void on_slBufSize_sliderMoved(int position);
     void on_cbAvgVisible_stateChanged(int arg1);
     void on_slAvgSize_sliderMoved(int position);
     void on_cmbAvgType_currentIndexChanged(int index);

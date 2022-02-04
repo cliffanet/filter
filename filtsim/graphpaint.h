@@ -53,6 +53,7 @@ public:
     void tick(double val, uint32_t tm, double sigtrue);
     void clear();
     void setVMax(double val);
+    void setDataSize(size_t size);
     void setDataName(DataID id, const QString &name);
     void setDataColor(DataID id, const QColor &color);
     void setDataVisible(DataID id, bool visible);
@@ -61,7 +62,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e) override;
-    void resizeEvent(QResizeEvent *e) override;
 
 private:
     hdr_t _info[DataCount];
