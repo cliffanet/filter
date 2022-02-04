@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+class QWheelEvent;
+class QMouseEvent;
+
 #include "../filtlib/ring.h"
 #include "../filtlib/filter_avg.h"
 #include "../filtlib/filter_avg2.h"
@@ -66,9 +69,14 @@ public:
 signals:
     void offsetXChanged(int newValue);
     void offsetYChanged(int newValue);
+    void scaleXChanged(int newValue);
+    void scaleYChanged(int newValue);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     hdr_t _info[DataCount];
@@ -77,6 +85,7 @@ private:
     ring <pnt_t>_data;
     int offset_x = 0, offset_y = 0;
     uint scale_x = 1, scale_y = 1;
+    QPoint drag_pos;
 
     template <typename T>
     inline T index2x(T index) {

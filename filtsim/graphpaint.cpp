@@ -1,5 +1,7 @@
 #include "graphpaint.h"
 #include <QPainter>
+#include <QWheelEvent>
+#include <QMouseEvent>
 #include <QDebug>
 
 #include <cmath>
@@ -103,32 +105,50 @@ void GraphPaint::setFilter(DataID id, filtBase *filter)
 
 void GraphPaint::setOffset(int x, int y)
 {
-    offset_x = x;
-    offset_y = y;
+    if (offset_x != x) {
+        offset_x = x;
+        emit offsetXChanged(offset_x);
+    }
+
+    if (offset_y != y) {
+        offset_y = y;
+        emit offsetYChanged(offset_y);
+    }
     update();
 }
 
 void GraphPaint::setScale(uint x, uint y, int fix_x, int fix_y)
 {
-    if (fix_x < 0)
-        fix_x += size().width();
-    int fix_ind1 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
-    if (fix_y < 0)
-        fix_y += size().height();
-    int fix_val1 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
+    if (scale_x != x) {
+        if (fix_x < 0)
+            fix_x += size().width();
+        int fix_ind1 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
 
-    scale_x = x;
-    scale_y = y;
+        scale_x = x;
 
-    int fix_ind2 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
-    if (fix_ind1 != fix_ind2) {
-        offset_x -= fix_ind2 - fix_ind1;
-        emit offsetXChanged(offset_x);
+        int fix_ind2 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
+        if (fix_ind1 != fix_ind2) {
+            offset_x -= fix_ind2 - fix_ind1;
+            emit offsetXChanged(offset_x);
+        }
+
+        emit scaleXChanged(scale_x);
     }
-    int fix_val2 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
-    if (fix_val1 != fix_val2) {
-        offset_y -= fix_val2 - fix_val1;
-        emit offsetYChanged(offset_y);
+
+    if (scale_y != y) {
+        if (fix_y < 0)
+            fix_y += size().height();
+        int fix_val1 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
+
+        scale_y = y;
+
+        int fix_val2 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
+        if (fix_val1 != fix_val2) {
+            offset_y -= fix_val2 - fix_val1;
+            emit offsetYChanged(offset_y);
+        }
+
+        emit scaleYChanged(scale_y);
     }
 
     update();
@@ -172,6 +192,8 @@ void GraphPaint::paintEvent(QPaintEvent *e)
                     break;
             }
 
+            if (pnt.x() > size().width())
+                break;
             index++;
         }
 
@@ -188,4 +210,35 @@ void GraphPaint::paintEvent(QPaintEvent *e)
         x++;
     }
     */
+}
+
+void GraphPaint::wheelEvent(QWheelEvent *event)
+{
+    QPoint d = event->pixelDelta();
+    int x = static_cast<int>(scale_x)+d.x();
+    int y = static_cast<int>(scale_y)+d.y();
+    setScale(
+        x > 0 ? x : 1,
+        y > 0 ? y : 1,
+        event->position().x(),
+        event->position().y()
+    );
+}
+
+void GraphPaint::mousePressEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton)
+        drag_pos = event->pos();
+}
+
+void GraphPaint::mouseMoveEvent(QMouseEvent *event)
+{
+    if ((event->buttons() & Qt::LeftButton) && !drag_pos.isNull()) {
+        QPoint diff = event->pos() - drag_pos;
+        drag_pos = event->pos();
+        setOffset(
+            offset_x - diff.x(),
+            offset_y + diff.y()
+        );
+    }
 }

@@ -55,7 +55,11 @@ private:
 
     void changeXOffset(int x);
     void changeYOffset(int y);
-    void updateViewOffset(bool updchrt = true);
+    void changeXScale(int x);
+    void changeYScale(int y);
+    void updateViewOffset();
+    void changeViewOffset();
     void updateViewScale();
+    void changeViewScale();
 };
 #endif // MAINWINDOW_H

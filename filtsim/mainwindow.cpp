@@ -33,9 +33,11 @@ MainWindow::MainWindow(QWidget *parent)
     on_slAvg2Size_sliderMoved(0);
     on_slLtSqrtSize_sliderMoved(0);
 
-    on_btnViewReset_clicked();
     connect(ui->chrt, &GraphPaint::offsetXChanged, this, &MainWindow::changeXOffset);
     connect(ui->chrt, &GraphPaint::offsetYChanged, this, &MainWindow::changeYOffset);
+    connect(ui->chrt, &GraphPaint::scaleXChanged, this, &MainWindow::changeXScale);
+    connect(ui->chrt, &GraphPaint::scaleYChanged, this, &MainWindow::changeYScale);
+    on_btnViewReset_clicked();
 
     tmrSim = new QTimer(this);
     connect(tmrSim, &QTimer::timeout, this, &MainWindow::dataSym);
@@ -83,6 +85,7 @@ void MainWindow::on_btnClear_clicked()
 
 void MainWindow::on_cbSigVisible_stateChanged(int arg1)
 {
+    Q_UNUSED(arg1)
     ui->chrt->setDataVisible(GraphPaint::DataSrc, ui->cbSigVisible->isChecked());
 }
 
@@ -111,6 +114,7 @@ void MainWindow::on_cmbSigType_currentIndexChanged(int index)
 
 void MainWindow::on_cbTrueVisible_stateChanged(int arg1)
 {
+    Q_UNUSED(arg1)
     ui->chrt->setDataVisible(GraphPaint::DataTrue, ui->cbTrueVisible->isChecked());
 }
 
@@ -134,6 +138,7 @@ void MainWindow::on_slBufSize_sliderMoved(int position)
 
 void MainWindow::on_cbAvgVisible_stateChanged(int arg1)
 {
+    Q_UNUSED(arg1)
     ui->chrt->setDataVisible(GraphPaint::DataAvg, ui->cbAvgVisible->isChecked());
 }
 
@@ -156,6 +161,7 @@ void MainWindow::on_cmbAvgType_currentIndexChanged(int index)
 
 void MainWindow::on_cbAvg2Visible_stateChanged(int arg1)
 {
+    Q_UNUSED(arg1)
     ui->chrt->setDataVisible(GraphPaint::DataAvg2, ui->cbAvg2Visible->isChecked());
 }
 
@@ -178,6 +184,7 @@ void MainWindow::on_cmbAvg2Type_currentIndexChanged(int index)
 
 void MainWindow::on_cbLtSqrtVisible_stateChanged(int arg1)
 {
+    Q_UNUSED(arg1)
     ui->chrt->setDataVisible(GraphPaint::DataLtSqrt, ui->cbLtSqrtVisible->isChecked());
 }
 
@@ -201,58 +208,73 @@ void MainWindow::on_cmbLtSqrtType_currentIndexChanged(int index)
 void MainWindow::on_slOffsetX_sliderMoved(int position)
 {
     Q_UNUSED(position)
-    updateViewOffset();
+    changeViewOffset();
 }
 
 void MainWindow::on_slOffsetY_sliderMoved(int position)
 {
     Q_UNUSED(position)
-    updateViewOffset();
+    changeViewOffset();
 }
 
 void MainWindow::on_slScaleX_sliderMoved(int position)
 {
     Q_UNUSED(position)
-    updateViewScale();
+    changeViewScale();
 }
 
 void MainWindow::on_slScaleY_sliderMoved(int position)
 {
     Q_UNUSED(position)
-    updateViewScale();
+    changeViewScale();
 }
 
 void MainWindow::on_btnViewReset_clicked()
 {
     ui->slScaleX->setValue(100);
     ui->slScaleY->setValue(100);
-    updateViewScale();
+    changeViewScale();
     ui->slOffsetX->setValue(0);
     ui->slOffsetY->setValue(0);
-    updateViewOffset();
+    changeViewOffset();
 }
 
 void MainWindow::changeXOffset(int x)
 {
     ui->slOffsetX->setValue(x);
-    updateViewOffset(false);
+    updateViewOffset();
 }
 
 void MainWindow::changeYOffset(int y)
 {
     ui->slOffsetY->setValue(y);
-    updateViewOffset(false);
+    updateViewOffset();
 }
 
-void MainWindow::updateViewOffset(bool updchrt)
+void MainWindow::changeXScale(int x)
+{
+    ui->slScaleX->setValue(x);
+    updateViewScale();
+}
+
+void MainWindow::changeYScale(int y)
+{
+    ui->slScaleY->setValue(y);
+    updateViewScale();
+}
+
+void MainWindow::updateViewOffset()
 {
     ui->labVOffset->setText(
         QString::number(ui->slOffsetX->value()) +
         " x " +
         QString::number(ui->slOffsetY->value())
     );
-    if (updchrt)
-        ui->chrt->setOffset(ui->slOffsetX->value(), ui->slOffsetY->value());
+}
+
+void MainWindow::changeViewOffset()
+{
+    ui->chrt->setOffset(ui->slOffsetX->value(), ui->slOffsetY->value());
 }
 
 void MainWindow::updateViewScale()
@@ -262,6 +284,10 @@ void MainWindow::updateViewScale()
         " x " +
         QString::number(ui->slScaleY->value())
     );
+}
+
+void MainWindow::changeViewScale()
+{
     ui->chrt->setScale(
         ui->slScaleX->value(),
         ui->slScaleY->value(),
