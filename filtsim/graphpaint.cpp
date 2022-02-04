@@ -19,9 +19,14 @@ GraphPaint::~GraphPaint()
 
 void GraphPaint::tick(double val, uint32_t tm)
 {
+    tick(val, tm, -1);
+}
+
+void GraphPaint::tick(double val, uint32_t tm, double sigtrue)
+{
     pnt_t p = {
         tm,
-        { val }
+        { val, sigtrue }
     };
     for (int id = DataSrc+1; id < DataCount; id++) {
         auto &inf = _info[id];

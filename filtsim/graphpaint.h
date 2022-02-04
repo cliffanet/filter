@@ -21,6 +21,7 @@ class GraphPaint : public QWidget
 public:
     typedef enum {
         DataSrc = 0,
+        DataTrue,
         DataAvg,
         DataAvg2,
         DataLtSqrt,
@@ -49,6 +50,7 @@ public:
     ~GraphPaint() override;
 
     void tick(double val, uint32_t tm);
+    void tick(double val, uint32_t tm, double sigtrue);
     void clear();
     void setVMax(double val);
     void setDataName(DataID id, const QString &name);

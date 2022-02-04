@@ -253,6 +253,45 @@
             <bool>true</bool>
            </property>
           </widget>
+          <widget class="QComboBox" name="cmbTrueType">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>120</y>
+             <width>79</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <item>
+            <property name="text">
+             <string>Точки</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Линии</string>
+            </property>
+           </item>
+          </widget>
+          <widget class="QCheckBox" name="cbTrueVisible">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>90</y>
+             <width>85</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: magenta;</string>
+           </property>
+           <property name="text">
+            <string>чистый</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
          </widget>
          <widget class="QWidget" name="tabAverage">
           <attribute name="title">
@@ -551,7 +590,7 @@
             </rect>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: magenta;</string>
+            <string notr="true">background-color: blue;</string>
            </property>
            <property name="checked">
             <bool>true</bool>

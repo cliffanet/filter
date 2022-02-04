@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     on_slAvg2Size_sliderMoved(0);
     on_slLtSqrtSize_sliderMoved(0);
 
-    const QColor sigColor[] = { Qt::red, Qt::green, Qt::darkYellow, Qt::magenta };
+    const QColor sigColor[] = { Qt::red, Qt::magenta, Qt::green, Qt::darkYellow, Qt::blue };
     for (auto id = GraphPaint::DataSrc; id < GraphPaint::DataCount; id = static_cast<GraphPaint::DataID>(id+1))
         if ((id >= 0) && (id < sizeof(sigColor)/sizeof(QColor)))
             ui->chrt->setDataColor(id, sigColor[id]);
@@ -45,13 +45,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::dataSym()
 {
+    int sigtrue = ui->slSigLevel->value();
     std::random_device rd{};
     std::mt19937 gen{rd()};
-    std::normal_distribution<double> d( ui->slSigLevel->value(), ui->slSigNoise->value() );
+    std::normal_distribution<double> d( sigtrue, ui->slSigNoise->value() );
 
     static qint64 tmprev = 0;
     auto tmcur = tmrElaps->elapsed();
-    ui->chrt->tick(d(gen), tmcur - tmprev);
+    ui->chrt->tick(d(gen), tmcur - tmprev, sigtrue);
     tmprev = tmcur;
 }
 
@@ -103,6 +104,21 @@ void MainWindow::on_cmbSigType_currentIndexChanged(int index)
 {
     ui->chrt->setDrawType(
         GraphPaint::DataSrc,
+        index == 1 ?
+            GraphPaint::DrawLine :
+            GraphPaint::DrawPoint
+    );
+}
+
+void MainWindow::on_cbTrueVisible_stateChanged(int arg1)
+{
+    ui->chrt->setDataVisible(GraphPaint::DataTrue, ui->cbTrueVisible->isChecked());
+}
+
+void MainWindow::on_cmbTrueType_currentIndexChanged(int index)
+{
+    ui->chrt->setDrawType(
+        GraphPaint::DataTrue,
         index == 1 ?
             GraphPaint::DrawLine :
             GraphPaint::DrawPoint
