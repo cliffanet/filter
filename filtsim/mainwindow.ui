@@ -528,6 +528,35 @@
             <string>Сбросить</string>
            </property>
           </widget>
+          <widget class="QCheckBox" name="chkWhiteBg">
+           <property name="geometry">
+            <rect>
+             <x>310</x>
+             <y>10</y>
+             <width>101</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Белый фон</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="chkBorder">
+           <property name="geometry">
+            <rect>
+             <x>310</x>
+             <y>40</y>
+             <width>101</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Рамка</string>
+           </property>
+          </widget>
          </widget>
          <widget class="QWidget" name="tabAverage">
           <attribute name="title">

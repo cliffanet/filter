@@ -36,6 +36,11 @@ public:
         DrawLine
     } DrawType;
 
+    typedef enum {
+        DrawWhiteBg = 0x01,
+        DrawBorder = 0x02,
+    } DrawFlags;
+
     typedef struct gpnt {
         uint32_t tdiff = 0;
         double val[DataCount] = { 0 };
@@ -64,6 +69,8 @@ public:
     void setOffset(int x, int y);
     void setScale(uint x, uint y, int fix_x = -1, int fix_y = -1);
 
+    void setDrawFlags(DrawFlags flag, bool set = true);
+
     const filtAvg   & filterAvg()   const { return _filterAvg; }
     const filtAvg2  & filterAvg2()  const { return _filterAvg2; }
     const filtLtSqrt& filterLtSqrt()const { return _filterLtSqrt; }
@@ -86,6 +93,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
+    uint32_t _flags = 0;
     hdr_t _info[DataCount];
     uint32_t dcur = 0;
     double vmax = 0;

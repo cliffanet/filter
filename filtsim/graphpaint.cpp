@@ -130,6 +130,16 @@ void GraphPaint::setScale(uint x, uint y, int fix_x, int fix_y)
     update();
 }
 
+void GraphPaint::setDrawFlags(DrawFlags flag, bool set)
+{
+    if (set)
+        _flags |= flag;
+    else
+        _flags &= ~flag;
+
+    update();
+}
+
 void GraphPaint::updateFilter(DataID id)
 {
     if (id <= DataSrc)
@@ -170,10 +180,17 @@ void GraphPaint::paintEvent(QPaintEvent *e)
     Q_UNUSED(e)
     QPainter p(this);
     int h = this->size().height();
-    p.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap));
 
-    QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
-    p.drawRect(rect);
+    if (_flags & DrawWhiteBg) {
+        QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
+        p.fillRect(rect, QBrush(Qt::white));
+    }
+
+    if (_flags & DrawBorder) {
+        p.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap));
+        QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
+        p.drawRect(rect);
+    }
 
     int ibeg = x2index(0);
     if (ibeg < 0)

@@ -47,6 +47,9 @@ private slots:
     void on_slScaleY_sliderMoved(int position);
     void on_btnViewReset_clicked();
 
+    void on_chkWhiteBg_clicked();
+    void on_chkBorder_clicked();
+
 private:
     Ui::MainWindow *ui;
 

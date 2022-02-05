@@ -39,6 +39,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->chrt, &GraphPaint::scaleYChanged, this, &MainWindow::changeYScale);
     on_btnViewReset_clicked();
 
+    on_chkWhiteBg_clicked();
+    on_chkBorder_clicked();
+
     tmrSim = new QTimer(this);
     connect(tmrSim, &QTimer::timeout, this, &MainWindow::dataSym);
     tmrElaps = new QElapsedTimer;
@@ -237,6 +240,16 @@ void MainWindow::on_btnViewReset_clicked()
     ui->slOffsetX->setValue(0);
     ui->slOffsetY->setValue(0);
     changeViewOffset();
+}
+
+void MainWindow::on_chkWhiteBg_clicked()
+{
+    ui->chrt->setDrawFlags(GraphPaint::DrawWhiteBg, ui->chkWhiteBg->isChecked());
+}
+
+void MainWindow::on_chkBorder_clicked()
+{
+    ui->chrt->setDrawFlags(GraphPaint::DrawBorder, ui->chkBorder->isChecked());
 }
 
 void MainWindow::changeXOffset(int x)
