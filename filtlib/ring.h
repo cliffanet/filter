@@ -1,13 +1,11 @@
 #ifndef RING_H
 #define RING_H
 
-#pragma once
-#include <iostream>
-#include <exception>
+#include <stddef.h>
+#include <stdlib.h>
 #include <cassert>
-#include <vector>
-#include <initializer_list>
-
+#include <type_traits>
+#include <stdexcept>
 
 template <class T>
 class ring
@@ -16,27 +14,20 @@ class ring
     using reference = T & ;
     using const_reference = const T &;
     using size_type = size_t;
-    using circularBuffer = std::vector<value_type>;
 
-    circularBuffer m_array;
+    value_type *m_array;
     size_type m_head;
     size_type m_tail;
     size_type m_contents_size;
     size_type m_array_size;
 public:
 
-    ring(size_type size = 8) : m_array(size),
+    ring(size_type size = 8) :
+        m_array(reinterpret_cast<value_type *>(malloc(size*sizeof(value_type)))),
         m_head(1),
         m_tail(0),
         m_contents_size(0),
         m_array_size(size) {
-        assert(m_array_size > 1 && "size must be greater than 1");
-    }
-    ring(std::initializer_list<T> l) :m_array(l),
-        m_head(0),
-        m_tail(l.size() - 1),
-        m_contents_size(l.size()),
-        m_array_size(l.size()) {
         assert(m_array_size > 1 && "size must be greater than 1");
     }
 
@@ -84,13 +75,14 @@ public:
     template <bool isconst = false>
     struct my_iterator
     {
-        using iterator_category = std::random_access_iterator_tag;
         using difference_type = long long;
-        using reference = typename std::conditional_t< isconst, T const &, T & >;
-        using pointer = typename std::conditional_t< isconst, T const *, T * >;
-        using vec_pointer = typename std::conditional_t<isconst, std::vector<T> const *, std::vector<T> *>;
+        using reference = typename std::conditional< isconst, T const &, T & >::type;
+        using pointer = typename std::conditional< isconst, T const *, T * >::type;
+        using vec_pointer = typename std::conditional<isconst, T const **, T **>::type;
+        using size_pointer = typename std::conditional<isconst, size_type const *, size_type *>::type;
     private:
         vec_pointer ptrToBuffer;
+        size_pointer ptrSize;
         size_type offset;
         size_type index;
         bool reverse;
@@ -100,16 +92,17 @@ public:
         }
 
     public:
-        my_iterator() : ptrToBuffer(nullptr), offset(0), index(0), reverse(false) {}  //
+        my_iterator() : ptrToBuffer(nullptr), ptrSize(nullptr), offset(0), index(0), reverse(false) {}  //
         my_iterator(const ring<T>::my_iterator<false>& i) :
             ptrToBuffer(i.ptrToBuffer),
+            ptrSize(i.ptrSize),
             offset(i.offset),
             index(i.index),
             reverse(i.reverse) {}
         reference operator*() {
             if (reverse)
-                return (*ptrToBuffer)[(ptrToBuffer->size() + offset - index) % (ptrToBuffer->size())];
-            return (*ptrToBuffer)[(offset+index)%(ptrToBuffer->size())];
+                return (*ptrToBuffer)[(*ptrSize + offset - index) % (*ptrSize)];
+            return (*ptrToBuffer)[(offset+index) % (*ptrSize)];
         }
         reference operator[](size_type index) {
             my_iterator iter = *this;
@@ -257,7 +250,8 @@ inline void ring<T>::resize(size_type count)
         m_tail = ntail;
     }
 
-    m_array.resize(count);
+    //m_array.resize(count);
+    m_array = reinterpret_cast<value_type *>(realloc(m_array, count*sizeof(value_type)));
 
     if (count > m_array_size) {
         m_tail = m_head+m_contents_size-1;
@@ -314,6 +308,7 @@ typename ring<T>::iterator ring<T>::begin()
 {
     iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_head;
     iter.index = 0;
     iter.reverse = false;
@@ -325,6 +320,7 @@ typename ring<T>::const_iterator ring<T>::begin() const
 {
     const_iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_head;
     iter.index = 0;
     iter.reverse = false;
@@ -336,6 +332,7 @@ typename ring<T>::const_iterator ring<T>::cbegin() const
 {
     const_iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_head;
     iter.index = 0;
     iter.reverse = false;
@@ -347,6 +344,7 @@ typename ring<T>::iterator ring<T>::rbegin()
 {
     iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_tail;
     iter.index = 0;
     iter.reverse = true;
@@ -358,6 +356,7 @@ typename ring<T>::const_iterator ring<T>::rbegin() const
 {
     const_iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_tail;
     iter.index = 0;
     iter.reverse = true;
@@ -369,6 +368,7 @@ typename ring<T>::iterator ring<T>::end()
 {
     iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_head;
     iter.index = m_contents_size;
     iter.reverse = false;
@@ -380,6 +380,7 @@ typename ring<T>::const_iterator ring<T>::end() const
 {
     const_iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_head;
     iter.index = m_contents_size;
     iter.reverse = false;
@@ -391,6 +392,7 @@ typename ring<T>::const_iterator ring<T>::cend() const
 {
     const_iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_head;
     iter.index = m_contents_size;
     iter.reverse = false;
@@ -402,6 +404,7 @@ typename ring<T>::iterator ring<T>::rend()
 {
     iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_tail;
     iter.index = m_contents_size;
     iter.reverse = true;
@@ -413,6 +416,7 @@ typename ring<T>::const_iterator ring<T>::rend() const
 {
     const_iterator iter;
     iter.ptrToBuffer = &m_array;
+    iter.ptrSize = &m_array_size;
     iter.offset = m_tail;
     iter.index = m_contents_size;
     iter.reverse = true;
@@ -424,7 +428,7 @@ void ring<T>::increment_tail()
 {
     ++m_tail;
     ++m_contents_size;
-    if (m_tail == m_array_size) m_tail = 0;
+    if (m_tail >= m_array_size) m_tail = 0;
 }
 
 template<class T>
@@ -433,7 +437,7 @@ void ring<T>::increment_head()
     if (m_contents_size == 0) return;
     ++m_head;
     --m_contents_size;
-    if (m_head == m_array_size) m_head = 0;
+    if (m_head >= m_array_size) m_head = 0;
 }
 
 #endif // RING_H
