@@ -9,14 +9,9 @@
 GraphPaint::GraphPaint(QWidget *parent)
     : QWidget{parent}
 {
-
-}
-
-GraphPaint::~GraphPaint()
-{
-    for (auto &inf : _info)
-        if (inf.filter != nullptr)
-            delete inf.filter;
+    _info[DataAvg].filter = &_filterAvg;
+    _info[DataAvg2].filter = &_filterAvg2;
+    _info[DataLtSqrt].filter = &_filterLtSqrt;
 }
 
 void GraphPaint::tick(double val, uint32_t tm)
@@ -84,25 +79,6 @@ void GraphPaint::setDrawType(DataID id, DrawType type)
     update();
 }
 
-void GraphPaint::setFilter(DataID id, filtBase *filter)
-{
-    if (id <= DataSrc)
-        return;
-
-    auto &inf = _info[id];
-    if (inf.filter != nullptr)
-        delete inf.filter;
-    inf.filter = filter;
-
-    if (filter != nullptr)
-        for (auto &d : _data) {
-            filter->tick(d.val[DataSrc], d.tdiff);
-            d.val[id] = filter->value();
-        }
-
-    update();
-}
-
 void GraphPaint::setOffset(int x, int y)
 {
     if (offset_x != x) {
@@ -152,6 +128,41 @@ void GraphPaint::setScale(uint x, uint y, int fix_x, int fix_y)
     }
 
     update();
+}
+
+void GraphPaint::updateFilter(DataID id)
+{
+    if (id <= DataSrc)
+        return;
+
+    auto &inf = _info[id];
+    if (inf.filter == nullptr)
+        return;
+
+    for (auto &d : _data) {
+        inf.filter->tick(d.val[DataSrc], d.tdiff);
+        d.val[id] = inf.filter->value();
+    }
+
+    update();
+}
+
+void GraphPaint::resizeAvg(size_t sz)
+{
+    _filterAvg.resize(sz);
+    updateFilter(DataAvg);
+}
+
+void GraphPaint::resizeAvg2(size_t sz)
+{
+    _filterAvg2.resize(sz);
+    updateFilter(DataAvg2);
+}
+
+void GraphPaint::resizeLtSqrt(size_t sz)
+{
+    _filterLtSqrt.resize(sz);
+    updateFilter(DataLtSqrt);
 }
 
 void GraphPaint::paintEvent(QPaintEvent *e)

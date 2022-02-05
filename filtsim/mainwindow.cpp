@@ -146,7 +146,7 @@ void MainWindow::on_slAvgSize_sliderMoved(int position)
 {
     Q_UNUSED(position)
     ui->labVAvgSize->setText(QString::number(ui->slAvgSize->value()));
-    ui->chrt->setFilter(GraphPaint::DataAvg, new filtAvg(ui->slAvgSize->value()));
+    ui->chrt->resizeAvg(ui->slAvgSize->value());
 }
 
 void MainWindow::on_cmbAvgType_currentIndexChanged(int index)
@@ -169,7 +169,7 @@ void MainWindow::on_slAvg2Size_sliderMoved(int position)
 {
     Q_UNUSED(position)
     ui->labVAvg2Size->setText(QString::number(ui->slAvg2Size->value()));
-    ui->chrt->setFilter(GraphPaint::DataAvg2, new filtAvg2(ui->slAvg2Size->value()));
+    ui->chrt->resizeAvg2(ui->slAvg2Size->value());
 }
 
 void MainWindow::on_cmbAvg2Type_currentIndexChanged(int index)
@@ -192,7 +192,7 @@ void MainWindow::on_slLtSqrtSize_sliderMoved(int position)
 {
     Q_UNUSED(position)
     ui->labVLtSqrtSize->setText(QString::number(ui->slLtSqrtSize->value()));
-    ui->chrt->setFilter(GraphPaint::DataLtSqrt, new filtAvg2(ui->slLtSqrtSize->value()));
+    ui->chrt->resizeLtSqrt(ui->slLtSqrtSize->value());
 }
 
 void MainWindow::on_cmbLtSqrtType_currentIndexChanged(int index)

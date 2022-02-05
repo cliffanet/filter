@@ -50,7 +50,6 @@ public:
     } hdr_t;
 
     explicit GraphPaint(QWidget *parent = nullptr);
-    ~GraphPaint() override;
 
     void tick(double val, uint32_t tm);
     void tick(double val, uint32_t tm, double sigtrue);
@@ -61,10 +60,18 @@ public:
     void setDataColor(DataID id, const QColor &color);
     void setDataVisible(DataID id, bool visible);
     void setDrawType(DataID id, DrawType type);
-    void setFilter(DataID id, filtBase *filter);
 
     void setOffset(int x, int y);
     void setScale(uint x, uint y, int fix_x = -1, int fix_y = -1);
+
+    const filtAvg   & filterAvg()   const { return _filterAvg; }
+    const filtAvg2  & filterAvg2()  const { return _filterAvg2; }
+    const filtLtSqrt& filterLtSqrt()const { return _filterLtSqrt; }
+
+    void updateFilter(DataID id);
+    void resizeAvg(size_t sz);
+    void resizeAvg2(size_t sz);
+    void resizeLtSqrt(size_t sz);
 
 signals:
     void offsetXChanged(int newValue);
@@ -86,6 +93,10 @@ private:
     int offset_x = 0, offset_y = 0;
     uint scale_x = 1, scale_y = 1;
     QPoint drag_pos;
+
+    filtAvg _filterAvg;
+    filtAvg2 _filterAvg2;
+    filtLtSqrt _filterLtSqrt;
 
     template <typename T>
     inline T index2x(T index) {
