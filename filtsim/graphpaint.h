@@ -55,6 +55,7 @@ public:
         bool    visible = true;
         DrawType draw = DrawPoint;
         filtBase *filter = nullptr;
+        QString field;
     } hdr_t;
 
     explicit GraphPaint(QWidget *parent = nullptr);
@@ -92,6 +93,8 @@ public:
 
     double valDrawMin() { return y2value(static_cast<double>(size().height()-1)); }
     double valDrawMax() { return y2value(static_cast<double>(0)); }
+
+    bool dataSaveCSV(QString fname, uint8_t floatnum = 2);
 
 signals:
     void offsetXChanged(int newValue);

@@ -23,6 +23,8 @@ public:
     void setSelected(int index);
 
 private slots:
+    void on_btnLoad_clicked();
+    void on_btnSave_clicked();
     void on_spinFloatNum_valueChanged(int arg1);
 
 private:
@@ -34,6 +36,7 @@ protected:
 private:
     Ui::WndData *ui;
     GraphPaint *m_chrt;
+    QString m_save_path;
 };
 
 #endif // WNDDATA_H

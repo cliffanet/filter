@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include <cmath>
+#include <QFile>
 
 GraphPaint::GraphPaint(QWidget *parent)
     : QWidget{parent}
@@ -14,6 +15,12 @@ GraphPaint::GraphPaint(QWidget *parent)
     _info[DataAvg].filter = &_filterAvg;
     _info[DataAvg2].filter = &_filterAvg2;
     _info[DataLtSqrt].filter = &_filterLtSqrt;
+
+    _info[DataSrc].field    = "src";
+    _info[DataTrue].field   = "true";
+    _info[DataAvg].field    = "avg";
+    _info[DataAvg2].field   = "avg2";
+    _info[DataLtSqrt].field = "ltsqrt";
 }
 
 void GraphPaint::tick(double val, uint32_t tm)
@@ -187,6 +194,34 @@ void GraphPaint::resizeLtSqrt(size_t sz)
 {
     _filterLtSqrt.resize(sz);
     updateFilter(DataLtSqrt);
+}
+
+bool GraphPaint::dataSaveCSV(QString fname, uint8_t floatnum)
+{
+    QFile saveFile(fname);
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+        return false;
+    }
+
+    for (const auto &inf : _info)
+        if (!saveFile.write(QString("\"" + inf.field + "\";").toLocal8Bit().data()))
+            return false;
+    if (!saveFile.write("\n")) return false;
+
+    const auto fmt = QString("%0."+QString::number(floatnum)+"f").toLocal8Bit();
+
+    for (const auto &d : _data) {
+        for (const auto &v : d.val) {
+            QString sv = QString::asprintf(fmt.data(), v);
+            sv.replace(".", ",");
+            if (!saveFile.write(QString(sv + ";").toLocal8Bit().data()))
+                return false;
+        }
+        if (!saveFile.write("\n")) return false;
+    }
+
+    return true;
 }
 
 void GraphPaint::resizeEvent(QResizeEvent *event)
