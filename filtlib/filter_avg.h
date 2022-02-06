@@ -3,7 +3,6 @@
 
 #include "filter.h"
 #include "ring.h"
-#include <cmath>
 
 template <class T>
 class FilterAvg : public FilterBase<T>
@@ -48,7 +47,7 @@ public:
             tm += it->tm;
         }
 
-        m_val = std::round(val / m_data.size());
+        m_val = val / m_data.size();
         m_speed = tm > 0 ? (m_data.back().val - m_data.front().val) / tm : 0;
     }
 };

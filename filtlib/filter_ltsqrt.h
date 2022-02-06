@@ -65,8 +65,14 @@ public:
         }
 
         m_tm = x;
-        m_ka = (sxy * m_data.size() - (sx * sy)) / (sx2 * m_data.size() - (sx * sx));
-        m_kb = (sy - (m_ka * sx)) / m_data.size();
+        if (m_data.size() > 1) {
+            m_ka = (sxy * m_data.size() - (sx * sy)) / (sx2 * m_data.size() - (sx * sx));
+            m_kb = (sy - (m_ka * sx)) / m_data.size();
+        }
+        else {
+            m_ka = 0;
+            m_kb = _val;
+        }
         m_val = m_ka * m_tm + m_kb;
     }
 };

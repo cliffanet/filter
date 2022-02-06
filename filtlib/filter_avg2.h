@@ -47,7 +47,7 @@ public:
             val += d.val * d.val;
 
         m_prev = m_val;
-        m_val = std::round(std::sqrt(val / m_data.size()));
+        m_val = std::sqrt(val / m_data.size());
         m_speed = (m_data.size() > 1) && (_tm > 0) ? (m_val - m_prev) / _tm : 0;
     }
 };
