@@ -41,10 +41,6 @@ private slots:
     void on_slLtSqrtSize_sliderMoved(int position);
     void on_cmbLtSqrtType_currentIndexChanged(int index);
 
-    void on_slOffsetX_sliderMoved(int position);
-    void on_slOffsetY_sliderMoved(int position);
-    void on_slScaleX_sliderMoved(int position);
-    void on_slScaleY_sliderMoved(int position);
     void on_btnViewReset_clicked();
 
     void on_chkWhiteBg_clicked();
@@ -56,13 +52,12 @@ private:
     QTimer *tmrSim;
     QElapsedTimer *tmrElaps;
 
+    void changeValRange();
     void changeXOffset(int x);
     void changeYOffset(int y);
     void changeXScale(int x);
     void changeYScale(int y);
     void updateViewOffset();
-    void changeViewOffset();
     void updateViewScale();
-    void changeViewScale();
 };
 #endif // MAINWINDOW_H

@@ -1,4 +1,5 @@
 #include "graphpaint.h"
+#include <QResizeEvent>
 #include <QPainter>
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -89,6 +90,7 @@ void GraphPaint::setOffset(int x, int y)
     if (offset_y != y) {
         offset_y = y;
         emit offsetYChanged(offset_y);
+        emit valDrawRangeChanged();
     }
     update();
 }
@@ -98,13 +100,13 @@ void GraphPaint::setScale(uint x, uint y, int fix_x, int fix_y)
     if (scale_x != x) {
         if (fix_x < 0)
             fix_x += size().width();
-        int fix_ind1 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
+        int fix_ind = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
 
         scale_x = x;
 
-        int fix_ind2 = static_cast<int>(std::round(x2index(static_cast<double>(fix_x))));
-        if (fix_ind1 != fix_ind2) {
-            offset_x -= fix_ind2 - fix_ind1;
+        int new_x = static_cast<int>(std::round(index2x(static_cast<double>(fix_ind))));
+        if (new_x != fix_x) {
+            offset_x -= new_x - fix_x;
             emit offsetXChanged(offset_x);
         }
 
@@ -114,17 +116,18 @@ void GraphPaint::setScale(uint x, uint y, int fix_x, int fix_y)
     if (scale_y != y) {
         if (fix_y < 0)
             fix_y += size().height();
-        int fix_val1 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
+        int fix_val = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
 
         scale_y = y;
 
-        int fix_val2 = static_cast<int>(std::round(y2value(static_cast<double>(fix_y))));
-        if (fix_val1 != fix_val2) {
-            offset_y -= fix_val2 - fix_val1;
+        int new_y = static_cast<int>(std::round(value2y(static_cast<double>(fix_val))));
+        if (new_y != fix_y) {
+            offset_y += new_y - fix_y;
             emit offsetYChanged(offset_y);
         }
 
         emit scaleYChanged(scale_y);
+        emit valDrawRangeChanged();
     }
 
     update();
@@ -175,9 +178,15 @@ void GraphPaint::resizeLtSqrt(size_t sz)
     updateFilter(DataLtSqrt);
 }
 
-void GraphPaint::paintEvent(QPaintEvent *e)
+void GraphPaint::resizeEvent(QResizeEvent *event)
 {
-    Q_UNUSED(e)
+    if (event->oldSize().height() != event->size().height())
+        emit valDrawRangeChanged();
+}
+
+void GraphPaint::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
     QPainter p(this);
     int h = this->size().height();
 
@@ -262,11 +271,8 @@ void GraphPaint::mousePressEvent(QMouseEvent *event)
 void GraphPaint::mouseMoveEvent(QMouseEvent *event)
 {
     if ((event->buttons() & Qt::LeftButton) && !drag_pos.isNull()) {
-        QPoint diff = event->pos() - drag_pos;
+        QPoint offset = QPoint(offset_x, offset_y) - (event->pos() - drag_pos);
         drag_pos = event->pos();
-        setOffset(
-            offset_x - diff.x(),
-            offset_y + diff.y()
-        );
+        setOffset(offset.x(), offset.y());
     }
 }

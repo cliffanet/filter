@@ -12,6 +12,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle( QCoreApplication::applicationName() );
 
+    connect(ui->chrt, &GraphPaint::valDrawRangeChanged, this, &MainWindow::changeValRange);
+    connect(ui->chrt, &GraphPaint::offsetXChanged, this, &MainWindow::changeXOffset);
+    connect(ui->chrt, &GraphPaint::offsetYChanged, this, &MainWindow::changeYOffset);
+    connect(ui->chrt, &GraphPaint::scaleXChanged, this, &MainWindow::changeXScale);
+    connect(ui->chrt, &GraphPaint::scaleYChanged, this, &MainWindow::changeYScale);
+
     ui->chrt->setVMax(ui->slSigLevel->maximum());
     on_cmbSigType_currentIndexChanged(ui->cmbSigType->currentIndex());
     on_cmbAvgType_currentIndexChanged(ui->cmbAvgType->currentIndex());
@@ -33,10 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
     on_slAvg2Size_sliderMoved(0);
     on_slLtSqrtSize_sliderMoved(0);
 
-    connect(ui->chrt, &GraphPaint::offsetXChanged, this, &MainWindow::changeXOffset);
-    connect(ui->chrt, &GraphPaint::offsetYChanged, this, &MainWindow::changeYOffset);
-    connect(ui->chrt, &GraphPaint::scaleXChanged, this, &MainWindow::changeXScale);
-    connect(ui->chrt, &GraphPaint::scaleYChanged, this, &MainWindow::changeYScale);
     on_btnViewReset_clicked();
 
     on_chkWhiteBg_clicked();
@@ -135,7 +137,6 @@ void MainWindow::on_slBufSize_sliderMoved(int position)
 {
     Q_UNUSED(position)
     ui->labVBufSize->setText(QString::number(ui->slBufSize->value()));
-    ui->slOffsetX->setMinimum(-1 * ui->slBufSize->value());
     ui->chrt->setDataSize(static_cast<size_t>(ui->slBufSize->value()));
 }
 
@@ -208,38 +209,10 @@ void MainWindow::on_cmbLtSqrtType_currentIndexChanged(int index)
     );
 }
 
-void MainWindow::on_slOffsetX_sliderMoved(int position)
-{
-    Q_UNUSED(position)
-    changeViewOffset();
-}
-
-void MainWindow::on_slOffsetY_sliderMoved(int position)
-{
-    Q_UNUSED(position)
-    changeViewOffset();
-}
-
-void MainWindow::on_slScaleX_sliderMoved(int position)
-{
-    Q_UNUSED(position)
-    changeViewScale();
-}
-
-void MainWindow::on_slScaleY_sliderMoved(int position)
-{
-    Q_UNUSED(position)
-    changeViewScale();
-}
-
 void MainWindow::on_btnViewReset_clicked()
 {
-    ui->slScaleX->setValue(100);
-    ui->slScaleY->setValue(100);
-    changeViewScale();
-    ui->slOffsetX->setValue(0);
-    ui->slOffsetY->setValue(0);
-    changeViewOffset();
+    ui->chrt->setScale(100, 100);
+    ui->chrt->setOffset(0, 0);
 }
 
 void MainWindow::on_chkWhiteBg_clicked()
@@ -252,60 +225,56 @@ void MainWindow::on_chkBorder_clicked()
     ui->chrt->setDrawFlags(GraphPaint::DrawBorder, ui->chkBorder->isChecked());
 }
 
+void MainWindow::changeValRange()
+{
+    int min = static_cast<int>(std::round( ui->chrt->valDrawMin() ));
+    ui->slSigLevel->setMinimum(min);
+    ui->labVSigMin->setText(QString::number(min));
+    int max = static_cast<int>(std::round( ui->chrt->valDrawMax() ));
+    ui->labVSigMax->setText(QString::number(max));
+    ui->slSigLevel->setMaximum(max);
+    on_slSigLevel_sliderMoved(0);
+}
+
 void MainWindow::changeXOffset(int x)
 {
-    ui->slOffsetX->setValue(x);
+    Q_UNUSED(x)
     updateViewOffset();
 }
 
 void MainWindow::changeYOffset(int y)
 {
-    ui->slOffsetY->setValue(y);
+    Q_UNUSED(y)
     updateViewOffset();
 }
 
 void MainWindow::changeXScale(int x)
 {
-    ui->slScaleX->setValue(x);
+    Q_UNUSED(x)
     updateViewScale();
 }
 
 void MainWindow::changeYScale(int y)
 {
-    ui->slScaleY->setValue(y);
+    Q_UNUSED(y)
     updateViewScale();
 }
 
 void MainWindow::updateViewOffset()
 {
     ui->labVOffset->setText(
-        QString::number(ui->slOffsetX->value()) +
+        QString::number(ui->chrt->offsetX()) +
         " x " +
-        QString::number(ui->slOffsetY->value())
+        QString::number(ui->chrt->offsetY())
     );
-}
-
-void MainWindow::changeViewOffset()
-{
-    ui->chrt->setOffset(ui->slOffsetX->value(), ui->slOffsetY->value());
 }
 
 void MainWindow::updateViewScale()
 {
     ui->labVScale->setText(
-        QString::number(ui->slScaleX->value()) +
+        QString::number(ui->chrt->scaleX()) +
         " x " +
-        QString::number(ui->slScaleY->value())
-    );
-}
-
-void MainWindow::changeViewScale()
-{
-    ui->chrt->setScale(
-        ui->slScaleX->value(),
-        ui->slScaleY->value(),
-        -1,
-        ui->chrt->size().height()/2
+        QString::number(ui->chrt->scaleY())
     );
 }
 

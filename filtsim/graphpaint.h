@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+class QResizeEvent;
 class QWheelEvent;
 class QMouseEvent;
 
@@ -66,7 +67,11 @@ public:
     void setDataVisible(DataID id, bool visible);
     void setDrawType(DataID id, DrawType type);
 
+    int offsetX() const { return offset_x; }
+    int offsetY() const { return offset_y; }
     void setOffset(int x, int y);
+    uint scaleX() const { return scale_x; }
+    uint scaleY() const { return scale_y; }
     void setScale(uint x, uint y, int fix_x = -1, int fix_y = -1);
 
     void setDrawFlags(DrawFlags flag, bool set = true);
@@ -80,14 +85,19 @@ public:
     void resizeAvg2(size_t sz);
     void resizeLtSqrt(size_t sz);
 
+    double valDrawMin() { return y2value(static_cast<double>(size().height()-1)); }
+    double valDrawMax() { return y2value(static_cast<double>(0)); }
+
 signals:
     void offsetXChanged(int newValue);
     void offsetYChanged(int newValue);
     void scaleXChanged(int newValue);
     void scaleYChanged(int newValue);
+    void valDrawRangeChanged();
 
 protected:
-    void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -111,30 +121,43 @@ private:
         return
             static_cast<T>(size().width()) -
             (
-                (static_cast<T>(_data.size()) + static_cast<T>(offset_x) - static_cast<T>(index)) *
+                (static_cast<T>(_data.size()) - index) *
                     static_cast<T>(scale_x) / 100
-            );
+            ) -
+            static_cast<T>(offset_x);
     }
 
     template <typename T>
     inline T x2index(T x) {
         return
-            static_cast<T>(_data.size()) + static_cast<T>(offset_x) -
-            ((static_cast<T>(size().width()) - x) * 100 / static_cast<T>(scale_x));
+            static_cast<T>(_data.size()) -
+            (
+                (
+                    static_cast<T>(size().width()) -
+                    static_cast<T>(offset_x) -
+                    x
+                ) *
+                100 / static_cast<T>(scale_x)
+            );
     }
 
     template <typename T>
     inline T value2y(T value) {
         return
             static_cast<T>(size().height()) -
-            ((value - static_cast<T>(offset_y)) * static_cast<T>(scale_y) / 100);
+            (value * static_cast<T>(scale_y) / 100) -
+            static_cast<T>(offset_y);
     }
 
     template <typename T>
     inline T y2value(T y) {
         return
-            (static_cast<T>(size().height()) - y) * 100 / static_cast<T>(scale_y) +
-            static_cast<T>(offset_y);
+            (
+                static_cast<T>(size().height()) -
+                static_cast<T>(offset_y) -
+                y
+            ) *
+            100 / static_cast<T>(scale_y);
     }
 };
 
