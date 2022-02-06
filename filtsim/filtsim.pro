@@ -11,7 +11,9 @@ CONFIG += c++11
 SOURCES += \
     graphpaint.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    moddata.cpp \
+    wnddata.cpp
 
 HEADERS += \
     ../filtlib/filter_avg.h \
@@ -21,10 +23,13 @@ HEADERS += \
     ../filtlib/ring.h \
     ../filtlib/filter.h \
     graphpaint.h \
-    mainwindow.h
+    mainwindow.h \
+    moddata.h \
+    wnddata.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    wnddata.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

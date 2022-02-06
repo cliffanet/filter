@@ -6,6 +6,8 @@
 class QTimer;
 class QElapsedTimer;
 
+class WndData;
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -24,6 +26,8 @@ private slots:
     void on_btnStart_clicked();
     void on_btnStop_clicked();
     void on_btnClear_clicked();
+    void on_btnData_clicked();
+
     void on_cbSigVisible_stateChanged(int arg1);
     void on_slSigLevel_sliderMoved(int position);
     void on_slSigNoise_sliderMoved(int position);
@@ -51,6 +55,8 @@ private:
 
     QTimer *tmrSim;
     QElapsedTimer *tmrElaps;
+
+    WndData * wdata;
 
     void changeValRange();
     void changeXOffset(int x);

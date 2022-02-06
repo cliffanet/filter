@@ -1,6 +1,7 @@
 #include "graphpaint.h"
 #include <QResizeEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QDebug>
@@ -189,16 +190,23 @@ void GraphPaint::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
     QPainter p(this);
     int h = this->size().height();
+    //p.setRenderHint(QPainter::Antialiasing);
 
     if (_flags & DrawWhiteBg) {
         QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
-        p.fillRect(rect, QBrush(Qt::white));
+        //p.fillRect(rect, QBrush(Qt::white));
+
+        QPainterPath path;
+        path.addRoundedRect(rect, 7, 7);
+        p.setPen(QPen(Qt::white, 1));
+        p.fillPath(path, Qt::white);
+        p.drawPath(path);
     }
 
     if (_flags & DrawBorder) {
         p.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap));
         QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
-        p.drawRect(rect);
+        p.drawRoundedRect(rect, 7, 7);
     }
 
     int ibeg = x2index(0);

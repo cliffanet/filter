@@ -47,6 +47,8 @@ public:
         double val[DataCount] = { 0 };
     } pnt_t;
 
+    typedef ring <pnt_t> RingData;
+
     typedef struct ghdr {
         QString name;
         QColor color;
@@ -76,6 +78,7 @@ public:
 
     void setDrawFlags(DrawFlags flag, bool set = true);
 
+    const RingData  & rdata()       const { return _data; }
     const filtAvg   & filterAvg()   const { return _filterAvg; }
     const filtAvg2  & filterAvg2()  const { return _filterAvg2; }
     const filtLtSqrt& filterLtSqrt()const { return _filterLtSqrt; }
@@ -107,7 +110,7 @@ private:
     hdr_t _info[DataCount];
     uint32_t dcur = 0;
     double vmax = 0;
-    ring <pnt_t>_data;
+    RingData _data;
     int offset_x = 0, offset_y = 0;
     uint scale_x = 1, scale_y = 1;
     QPoint drag_pos;

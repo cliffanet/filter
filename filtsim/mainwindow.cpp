@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "wnddata.h"
+
 #include <QTimer>
 #include <QElapsedTimer>
 #include <random>
@@ -11,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle( QCoreApplication::applicationName() );
+
+    wdata = new WndData(ui->chrt, this);
 
     connect(ui->chrt, &GraphPaint::valDrawRangeChanged, this, &MainWindow::changeValRange);
     connect(ui->chrt, &GraphPaint::offsetXChanged, this, &MainWindow::changeXOffset);
@@ -66,6 +70,8 @@ void MainWindow::dataSym()
     auto tmcur = tmrElaps->elapsed();
     ui->chrt->tick(d(gen), tmcur - tmprev, sigtrue);
     tmprev = tmcur;
+
+    wdata->dataUpdate(true);
 }
 
 void MainWindow::on_btnStart_clicked()
@@ -86,6 +92,13 @@ void MainWindow::on_btnStop_clicked()
 void MainWindow::on_btnClear_clicked()
 {
     ui->chrt->clear();
+    wdata->dataUpdate();
+}
+
+void MainWindow::on_btnData_clicked()
+{
+    wdata->showNormal();
+    wdata->raise();
 }
 
 void MainWindow::on_cbSigVisible_stateChanged(int arg1)
