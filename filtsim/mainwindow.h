@@ -58,6 +58,7 @@ private:
 
     WndData * wdata;
 
+    void dataSizeChanged(uint sz);
     void changeValRange();
     void changeXOffset(int x);
     void changeYOffset(int y);

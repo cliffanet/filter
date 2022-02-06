@@ -8,6 +8,24 @@
 
 #include <cmath>
 #include <QFile>
+#include <QMessageBox>
+
+static const QString csv2str(const QString &str) {
+    return
+        (str.left(1)=="\"") && (str.right(1)=="\"") ?
+            str.mid(1, str.length()-2) :
+            str;
+}
+
+static uint csv2uint(const QString &str) {
+    return csv2str(str).toUInt();
+}
+
+static double csv2double(const QString &str) {
+    QString s = csv2str(str);
+    s.replace(",", ".");
+    return s.toDouble();
+}
 
 GraphPaint::GraphPaint(QWidget *parent)
     : QWidget{parent}
@@ -34,7 +52,7 @@ void GraphPaint::tick(double val, uint32_t tm, double sigtrue)
         tm,
         { val, sigtrue }
     };
-    for (int id = DataSrc+1; id < DataCount; id++) {
+    for (int id = DataSrc+2; id < DataCount; id++) {
         auto &inf = _info[id];
         if (inf.filter != nullptr) {
             inf.filter->tick(val, tm);
@@ -170,6 +188,8 @@ void GraphPaint::updateFilter(DataID id)
     if (inf.filter == nullptr)
         return;
 
+    inf.filter->clear();
+
     for (auto &d : _data) {
         inf.filter->tick(d.val[DataSrc], d.tdiff);
         d.val[id] = inf.filter->value();
@@ -196,14 +216,73 @@ void GraphPaint::resizeLtSqrt(size_t sz)
     updateFilter(DataLtSqrt);
 }
 
+bool GraphPaint::dataLoadCSV(QString fname, const LoadOpt &opt)
+{
+    QFile loadFile(fname);
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, "Ошибка", "Ошибка открытия файла: " + loadFile.errorString());
+        return false;
+    }
+
+    QTextStream stxt(&loadFile);
+    stxt.readLine();
+
+    QList <QStringList> slst;
+
+    while (!stxt.atEnd())
+        slst.push_back(stxt.readLine().trimmed().split(";"));
+
+    if (static_cast<uint>(slst.size()) > _data.capacity()) {
+        _data.resize(slst.size());
+        emit dataSizeChanged(_data.size());
+    }
+    _data.clear();
+
+    for (int id = DataSrc+2; id < DataCount; id++) {
+        auto &inf = _info[id];
+        if (inf.filter != nullptr)
+            inf.filter->clear();
+    }
+
+    uint64_t tmprev = 0;
+    for (const auto &s : slst) {
+        pnt_t p = { 0 };
+        if (opt.colTm >= 0) {
+            uint tm = csv2uint(s[opt.colTm]);
+            if (tm > tmprev)
+                p.tdiff = tm - tmprev;
+            tmprev = tm;
+        }
+        if (opt.colSrc >= 0)
+            p.val[DataSrc] = csv2double(s[opt.colSrc]);
+        if (opt.colTrue >= 0)
+            p.val[DataTrue] = csv2double(s[opt.colTrue]);
+
+        for (int id = DataSrc+2; id < DataCount; id++) {
+            auto &inf = _info[id];
+            if (inf.filter != nullptr) {
+                inf.filter->tick(p.val[DataSrc], p.tdiff);
+                p.val[id] = inf.filter->value();
+            }
+        }
+
+        _data.push_back(p);
+    }
+
+    update();
+
+    return true;
+}
+
 bool GraphPaint::dataSaveCSV(QString fname, uint8_t floatnum)
 {
     QFile saveFile(fname);
     if (!saveFile.open(QIODevice::WriteOnly)) {
-        qWarning("Couldn't open save file.");
+        QMessageBox::critical(this, "Ошибка сохранения", "Ошибка при сохранении файла: " + saveFile.errorString());
         return false;
     }
 
+    if (!saveFile.write("\"tm\";")) return false;
     for (const auto &inf : _info)
         if (!saveFile.write(QString("\"" + inf.field + "\";").toLocal8Bit().data()))
             return false;
@@ -211,7 +290,12 @@ bool GraphPaint::dataSaveCSV(QString fname, uint8_t floatnum)
 
     const auto fmt = QString("%0."+QString::number(floatnum)+"f").toLocal8Bit();
 
+    int64_t tm = _data.size() > 0 ? -1*_data.front().tdiff : 0;
     for (const auto &d : _data) {
+        tm += d.tdiff;
+        if (!saveFile.write(QString("" + QString::number(tm) + ";").toLocal8Bit().data()))
+            return false;
+
         for (const auto &v : d.val) {
             QString sv = QString::asprintf(fmt.data(), v);
             sv.replace(".", ",");

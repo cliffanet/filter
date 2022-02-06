@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     wdata = new WndData(ui->chrt, this);
 
+    connect(ui->chrt, &GraphPaint::dataSizeChanged, this, &MainWindow::dataSizeChanged);
     connect(ui->chrt, &GraphPaint::valDrawRangeChanged, this, &MainWindow::changeValRange);
     connect(ui->chrt, &GraphPaint::offsetXChanged, this, &MainWindow::changeXOffset);
     connect(ui->chrt, &GraphPaint::offsetYChanged, this, &MainWindow::changeYOffset);
@@ -236,6 +237,14 @@ void MainWindow::on_chkWhiteBg_clicked()
 void MainWindow::on_chkBorder_clicked()
 {
     ui->chrt->setDrawFlags(GraphPaint::DrawBorder, ui->chkBorder->isChecked());
+}
+
+void MainWindow::dataSizeChanged(uint sz)
+{
+    if (static_cast<uint>(ui->slBufSize->maximum()) < sz)
+        ui->slBufSize->setMaximum(sz);
+    ui->slBufSize->setValue(sz);
+    ui->labVBufSize->setText(QString::number(sz));
 }
 
 void MainWindow::changeValRange()

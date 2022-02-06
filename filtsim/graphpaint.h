@@ -58,6 +58,12 @@ public:
         QString field;
     } hdr_t;
 
+    typedef struct {
+        int colTm;
+        int colSrc;
+        int colTrue;
+    } LoadOpt;
+
     explicit GraphPaint(QWidget *parent = nullptr);
 
     void tick(double val, uint32_t tm);
@@ -94,9 +100,11 @@ public:
     double valDrawMin() { return y2value(static_cast<double>(size().height()-1)); }
     double valDrawMax() { return y2value(static_cast<double>(0)); }
 
+    bool dataLoadCSV(QString fname, const LoadOpt &opt);
     bool dataSaveCSV(QString fname, uint8_t floatnum = 2);
 
 signals:
+    void dataSizeChanged(uint sz);
     void offsetXChanged(int newValue);
     void offsetYChanged(int newValue);
     void scaleXChanged(int newValue);

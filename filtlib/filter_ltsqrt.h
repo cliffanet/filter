@@ -65,7 +65,7 @@ public:
         }
 
         m_tm = x;
-        if (m_data.size() > 1) {
+        if (m_tm > 0) {
             m_ka = (sxy * m_data.size() - (sx * sy)) / (sx2 * m_data.size() - (sx * sx));
             m_kb = (sy - (m_ka * sx)) / m_data.size();
         }

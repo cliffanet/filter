@@ -13,7 +13,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     moddata.cpp \
-    wnddata.cpp
+    wnddata.cpp \
+    wndimport.cpp
 
 HEADERS += \
     ../filtlib/filter_avg.h \
@@ -25,11 +26,13 @@ HEADERS += \
     graphpaint.h \
     mainwindow.h \
     moddata.h \
-    wnddata.h
+    wnddata.h \
+    wndimport.h
 
 FORMS += \
     mainwindow.ui \
-    wnddata.ui
+    wnddata.ui \
+    wndimport.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -2,10 +2,10 @@
 #include "ui_wnddata.h"
 #include "moddata.h"
 #include "graphpaint.h"
+#include "wndimport.h"
 
 #include <QStandardPaths>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QHideEvent>
 #include <QModelIndex>
 
@@ -24,6 +24,8 @@ WndData::WndData(GraphPaint *chrt, QWidget *parent) :
     );
 
     m_save_path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
+    wimport = new WndImport(this);
 }
 
 WndData::~WndData()
@@ -46,7 +48,19 @@ void WndData::setSelected(int index)
 
 void WndData::on_btnLoad_clicked()
 {
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Выбрать файл"), m_save_path, tr("Coma-separated files (*.csv)"));
+    if (fileName.isEmpty())
+        return;
+    m_save_path = QFileInfo(fileName).path();
 
+    GraphPaint::LoadOpt opt;
+    if (!wimport->chkOptions(fileName, opt))
+        return;
+
+    if (!m_chrt->dataLoadCSV(fileName, opt))
+        return;
+
+    dataUpdate(true);
 }
 
 void WndData::on_btnSave_clicked()
@@ -56,13 +70,8 @@ void WndData::on_btnSave_clicked()
         return;
     }
     m_save_path = QFileInfo(fileName).path();
-    if (!m_chrt->dataSaveCSV(fileName, ui->spinFloatNum->value())) {
-        QMessageBox msg(this);
-        msg.setWindowTitle("Сохранение");
-        msg.setText("Ошибка при сохранении файла");
-        msg.setIcon(QMessageBox::Critical);
-        msg.exec();
-    }
+
+    m_chrt->dataSaveCSV(fileName, ui->spinFloatNum->value());
 }
 
 void WndData::on_spinFloatNum_valueChanged(int arg1)

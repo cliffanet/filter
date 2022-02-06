@@ -12,6 +12,7 @@ class FilterBase
 
 public:
     virtual void tick(const_reference val, uint16_t tm) = 0;
+    virtual void clear() = 0;
     virtual const_reference value() const = 0;
     virtual const_reference speed() const = 0;
 };

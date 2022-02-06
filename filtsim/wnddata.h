@@ -10,6 +10,7 @@ class WndData;
 class GraphPaint;
 class QHideEvent;
 class QItemSelection;
+class WndImport;
 
 class WndData : public QDialog
 {
@@ -37,6 +38,7 @@ private:
     Ui::WndData *ui;
     GraphPaint *m_chrt;
     QString m_save_path;
+    WndImport * wimport;
 };
 
 #endif // WNDDATA_H

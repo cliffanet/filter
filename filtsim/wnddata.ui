@@ -37,7 +37,7 @@
      <item>
       <widget class="QPushButton" name="btnLoad">
        <property name="text">
-        <string>Загрузить</string>
+        <string>Импорт</string>
        </property>
       </widget>
      </item>
