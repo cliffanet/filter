@@ -62,12 +62,14 @@ public:
     void tick(double val, uint32_t tm);
     void tick(double val, uint32_t tm, double sigtrue);
     void clear();
-    void setVMax(double val);
     void setDataSize(size_t size);
     void setDataName(DataID id, const QString &name);
     void setDataColor(DataID id, const QColor &color);
     void setDataVisible(DataID id, bool visible);
     void setDrawType(DataID id, DrawType type);
+
+    void setSelected(int selected);
+    void clearSelected();
 
     int offsetX() const { return offset_x; }
     int offsetY() const { return offset_y; }
@@ -97,6 +99,7 @@ signals:
     void scaleXChanged(int newValue);
     void scaleYChanged(int newValue);
     void valDrawRangeChanged();
+    void indexSelected(int index);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -108,7 +111,7 @@ protected:
 private:
     uint32_t _flags = 0;
     hdr_t _info[DataCount];
-    uint32_t dcur = 0;
+    int32_t m_selected = -1;
     double vmax = 0;
     RingData _data;
     int offset_x = 0, offset_y = 0;

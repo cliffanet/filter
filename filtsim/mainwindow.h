@@ -65,5 +65,6 @@ private:
     void changeYScale(int y);
     void updateViewOffset();
     void updateViewScale();
+    void indexSelected(int index);
 };
 #endif // MAINWINDOW_H

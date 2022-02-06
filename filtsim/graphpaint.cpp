@@ -45,12 +45,6 @@ void GraphPaint::clear()
     update();
 }
 
-void GraphPaint::setVMax(double val)
-{
-    vmax = val;
-    update();
-}
-
 void GraphPaint::setDataSize(size_t size)
 {
     _data.resize(size);
@@ -78,6 +72,22 @@ void GraphPaint::setDataVisible(DataID id, bool visible)
 void GraphPaint::setDrawType(DataID id, DrawType type)
 {
     _info[id].draw = type;
+    update();
+}
+
+void GraphPaint::setSelected(int selected)
+{
+    if (m_selected == selected)
+        return;
+    m_selected = selected;
+    update();
+}
+
+void GraphPaint::clearSelected()
+{
+    if (m_selected < 0)
+        return;
+    m_selected = -1;
     update();
 }
 
@@ -189,7 +199,7 @@ void GraphPaint::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     QPainter p(this);
-    int h = this->size().height();
+    int h = size().height();
     //p.setRenderHint(QPainter::Antialiasing);
 
     if (_flags & DrawWhiteBg) {
@@ -207,6 +217,14 @@ void GraphPaint::paintEvent(QPaintEvent *event)
         p.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap));
         QRect rect(QPoint(0, 0), QSize(this->size().width()-1, h-1));
         p.drawRoundedRect(rect, 7, 7);
+    }
+
+    if ((m_selected >= 0) && (static_cast<uint>(m_selected) < _data.size())) {
+        int x = index2x(m_selected);
+        if ((x >= 0) && (x < size().width())) {
+            p.setPen(QPen(Qt::black));
+            p.drawLine(x, 0, x, size().width()-1);
+        }
     }
 
     int ibeg = x2index(0);
@@ -272,8 +290,12 @@ void GraphPaint::wheelEvent(QWheelEvent *event)
 
 void GraphPaint::mousePressEvent(QMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton)
+    if (event->buttons() & Qt::LeftButton) {
         drag_pos = event->pos();
+        int index = static_cast<int>(std::round(x2index(static_cast<double>(event->pos().x()))));
+        if ((index >= 0) && (static_cast<uint>(index) < _data.size()))
+            emit indexSelected(index);
+    }
 }
 
 void GraphPaint::mouseMoveEvent(QMouseEvent *event)

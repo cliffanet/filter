@@ -8,6 +8,8 @@ class WndData;
 }
 
 class GraphPaint;
+class QHideEvent;
+class QItemSelection;
 
 class WndData : public QDialog
 {
@@ -18,9 +20,16 @@ public:
     ~WndData();
 
     void dataUpdate(bool scroll2end = false);
+    void setSelected(int index);
 
 private slots:
     void on_spinFloatNum_valueChanged(int arg1);
+
+private:
+    void twSelectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
+
+protected:
+   void hideEvent(QHideEvent * event);
 
 private:
     Ui::WndData *ui;

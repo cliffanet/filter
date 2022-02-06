@@ -21,8 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->chrt, &GraphPaint::offsetYChanged, this, &MainWindow::changeYOffset);
     connect(ui->chrt, &GraphPaint::scaleXChanged, this, &MainWindow::changeXScale);
     connect(ui->chrt, &GraphPaint::scaleYChanged, this, &MainWindow::changeYScale);
+    connect(ui->chrt, &GraphPaint::indexSelected, this, &MainWindow::indexSelected);
 
-    ui->chrt->setVMax(ui->slSigLevel->maximum());
     on_cmbSigType_currentIndexChanged(ui->cmbSigType->currentIndex());
     on_cmbAvgType_currentIndexChanged(ui->cmbAvgType->currentIndex());
     on_cmbAvg2Type_currentIndexChanged(ui->cmbAvg2Type->currentIndex());
@@ -289,5 +289,11 @@ void MainWindow::updateViewScale()
         " x " +
         QString::number(ui->chrt->scaleY())
     );
+}
+
+void MainWindow::indexSelected(int index)
+{
+    if (wdata->isVisible())
+        wdata->setSelected(index);
 }
 
