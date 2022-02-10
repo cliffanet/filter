@@ -11,11 +11,13 @@ class QMouseEvent;
 #include "../filtlib/filter_avg.h"
 #include "../filtlib/filter_avg2.h"
 #include "../filtlib/filter_ltsqrt.h"
+#include "../filtlib/filter_maxaccel.h"
 
 typedef FilterBase<double> filtBase;
 typedef FilterAvg<double> filtAvg;
 typedef FilterAvg2<double> filtAvg2;
 typedef FilterLtSqrt<double> filtLtSqrt;
+typedef FilterMaxAccel<double> filtMaxAccel;
 
 #define GRAPH_PAINT_SRC_COUNT   5
 
@@ -29,6 +31,7 @@ public:
         DataAvg,
         DataAvg2,
         DataLtSqrt,
+        DataMaxAccel,
         DataCount
     } DataID;
 
@@ -96,6 +99,9 @@ public:
     void resizeAvg(size_t sz);
     void resizeAvg2(size_t sz);
     void resizeLtSqrt(size_t sz);
+    void setMaxAccelSpeed(double val);
+    void setMaxAccelAccel(double val);
+    void setMaxAccelAcc2(double val);
 
     double valDrawMin() { return y2value(static_cast<double>(size().height()-1)); }
     double valDrawMax() { return y2value(static_cast<double>(0)); }
@@ -132,6 +138,7 @@ private:
     filtAvg _filterAvg;
     filtAvg2 _filterAvg2;
     filtLtSqrt _filterLtSqrt;
+    filtMaxAccel _filterMaxAccel;
 
     template <typename T>
     inline T index2x(T index) {

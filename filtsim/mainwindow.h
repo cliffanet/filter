@@ -44,6 +44,11 @@ private slots:
     void on_cbLtSqrtVisible_stateChanged(int arg1);
     void on_slLtSqrtSize_sliderMoved(int position);
     void on_cmbLtSqrtType_currentIndexChanged(int index);
+    void on_cbMaxAccelVisible_stateChanged(int arg1);
+    void on_cmbMaxAccelType_currentIndexChanged(int index);
+    void on_slMaxAccelSpeed_sliderMoved(int position);
+    void on_slMaxAccelAccel_sliderMoved(int position);
+    void on_slMaxAccelAcc2_sliderMoved(int position);
 
     void on_btnViewReset_clicked();
 

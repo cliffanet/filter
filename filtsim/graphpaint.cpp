@@ -33,12 +33,14 @@ GraphPaint::GraphPaint(QWidget *parent)
     _info[DataAvg].filter = &_filterAvg;
     _info[DataAvg2].filter = &_filterAvg2;
     _info[DataLtSqrt].filter = &_filterLtSqrt;
+    _info[DataMaxAccel].filter = &_filterMaxAccel;
 
     _info[DataSrc].field    = "src";
     _info[DataTrue].field   = "true";
     _info[DataAvg].field    = "avg";
     _info[DataAvg2].field   = "avg2";
     _info[DataLtSqrt].field = "ltsqrt";
+    _info[DataMaxAccel].field="maxaccel";
 }
 
 void GraphPaint::tick(double val, uint32_t tm)
@@ -142,7 +144,7 @@ void GraphPaint::setScale(uint x, uint y, int fix_x, int fix_y)
 
         int new_x = static_cast<int>(std::round(index2x(static_cast<double>(fix_ind))));
         if (new_x != fix_x) {
-            offset_x -= new_x - fix_x;
+            offset_x += new_x - fix_x;
             emit offsetXChanged(offset_x);
         }
 
@@ -214,6 +216,24 @@ void GraphPaint::resizeLtSqrt(size_t sz)
 {
     _filterLtSqrt.resize(sz);
     updateFilter(DataLtSqrt);
+}
+
+void GraphPaint::setMaxAccelSpeed(double val)
+{
+    _filterMaxAccel.set_max_speed(val);
+    updateFilter(DataMaxAccel);
+}
+
+void GraphPaint::setMaxAccelAccel(double val)
+{
+    _filterMaxAccel.set_max_accel(val);
+    updateFilter(DataMaxAccel);
+}
+
+void GraphPaint::setMaxAccelAcc2(double val)
+{
+    _filterMaxAccel.set_max_acc2(val);
+    updateFilter(DataMaxAccel);
 }
 
 bool GraphPaint::dataLoadCSV(QString fname, const LoadOpt &opt)

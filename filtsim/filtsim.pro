@@ -21,6 +21,7 @@ HEADERS += \
     ../filtlib/filter_avg2.h \
     ../filtlib/filter_avgdeg.h \
     ../filtlib/filter_ltsqrt.h \
+    ../filtlib/filter_maxaccel.h \
     ../filtlib/ring.h \
     ../filtlib/filter.h \
     graphpaint.h \

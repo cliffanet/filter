@@ -28,21 +28,21 @@ MainWindow::MainWindow(QWidget *parent)
     on_cmbAvgType_currentIndexChanged(ui->cmbAvgType->currentIndex());
     on_cmbAvg2Type_currentIndexChanged(ui->cmbAvg2Type->currentIndex());
     on_cmbLtSqrtType_currentIndexChanged(ui->cmbLtSqrtType->currentIndex());
+    on_cmbMaxAccelType_currentIndexChanged(ui->cmbMaxAccelType->currentIndex());
     on_slSigLevel_sliderMoved(0);
     on_slSigNoise_sliderMoved(0);
     on_slBufSize_sliderMoved(0);
     on_slAvgSize_sliderMoved(0);
     on_slAvg2Size_sliderMoved(0);
     on_slLtSqrtSize_sliderMoved(0);
+    on_slMaxAccelSpeed_sliderMoved(0);
+    on_slMaxAccelAccel_sliderMoved(0);
+    on_slMaxAccelAcc2_sliderMoved(0);
 
-    const QColor sigColor[] = { Qt::red, Qt::magenta, Qt::green, Qt::darkYellow, Qt::blue };
+    const QColor sigColor[] = { Qt::red, Qt::magenta, Qt::green, Qt::darkYellow, Qt::blue, { 75, 0, 130 } };
     for (auto id = GraphPaint::DataSrc; id < GraphPaint::DataCount; id = static_cast<GraphPaint::DataID>(id+1))
         if ((id >= 0) && (id < sizeof(sigColor)/sizeof(QColor)))
             ui->chrt->setDataColor(id, sigColor[id]);
-
-    on_slAvgSize_sliderMoved(0);
-    on_slAvg2Size_sliderMoved(0);
-    on_slLtSqrtSize_sliderMoved(0);
 
     on_btnViewReset_clicked();
 
@@ -221,6 +221,46 @@ void MainWindow::on_cmbLtSqrtType_currentIndexChanged(int index)
             GraphPaint::DrawLine :
             GraphPaint::DrawPoint
     );
+}
+
+void MainWindow::on_cbMaxAccelVisible_stateChanged(int arg1)
+{
+    Q_UNUSED(arg1)
+    ui->chrt->setDataVisible(GraphPaint::DataMaxAccel, ui->cbMaxAccelVisible->isChecked());
+}
+
+void MainWindow::on_cmbMaxAccelType_currentIndexChanged(int index)
+{
+    ui->chrt->setDrawType(
+        GraphPaint::DataMaxAccel,
+        index == 1 ?
+            GraphPaint::DrawLine :
+            GraphPaint::DrawPoint
+    );
+}
+
+void MainWindow::on_slMaxAccelSpeed_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slMaxAccelSpeed->value()) / 1000;
+    ui->labVMaxAccelSpeed->setText(QString::asprintf("%0.3f", val));
+    ui->chrt->setMaxAccelSpeed(val);
+}
+
+void MainWindow::on_slMaxAccelAccel_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slMaxAccelAccel->value()) / 1000000;
+    ui->labVMaxAccelAccel->setText(QString::asprintf("%0.6f", val));
+    ui->chrt->setMaxAccelAccel(val);
+}
+
+void MainWindow::on_slMaxAccelAcc2_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slMaxAccelAcc2->value()) / 1000000000;
+    ui->labVMaxAccelAcc2->setText(QString::asprintf("%0.9f", val));
+    ui->chrt->setMaxAccelAcc2(val);
 }
 
 void MainWindow::on_btnViewReset_clicked()
