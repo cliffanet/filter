@@ -39,7 +39,7 @@ FORMS += \
 ICON = icon/icon.icns
 RC_FILE = filtsim.rc
 
-TARGET = "Аналитика фильтров"
+TARGET = FilterSimulator
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

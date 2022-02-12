@@ -7,6 +7,9 @@
 #include <QElapsedTimer>
 #include <random>
 
+static std::random_device rd{};
+static std::mt19937 gen{rd()};
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -69,9 +72,7 @@ MainWindow::~MainWindow()
 void MainWindow::dataSym()
 {
     int sigtrue = ui->slSigLevel->value();
-    std::random_device rd{};
-    std::mt19937 gen{rd()};
-    std::normal_distribution<double> d( sigtrue, ui->slSigNoise->value() );
+    std::normal_distribution<double> d{ static_cast<double>(sigtrue), static_cast<double>(ui->slSigNoise->value()) };
 
     static qint64 tmprev = 0;
     auto tmcur = tmrElaps->elapsed();

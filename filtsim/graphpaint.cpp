@@ -52,10 +52,11 @@ void GraphPaint::tick(double val, uint32_t tm)
 
 void GraphPaint::tick(double val, uint32_t tm, double sigtrue)
 {
-    pnt_t p = {
-        tm,
-        { val, sigtrue }
-    };
+    pnt_t p;
+    p.tdiff = tm;
+    p.val[DataSrc] = val;
+    p.val[DataTrue] = sigtrue;
+
     for (int id = DataSrc+2; id < DataCount; id++) {
         auto &inf = _info[id];
         if (inf.filter != nullptr) {
@@ -296,9 +297,9 @@ bool GraphPaint::dataLoadCSV(QString fname, const LoadOpt &opt)
             inf.filter->clear();
     }
 
-    uint64_t tmprev = 0;
+    int64_t tmprev = 0;
     for (const auto &s : slst) {
-        pnt_t p = { 0 };
+        pnt_t p;
         if (opt.colTm >= 0) {
             int64_t tm = csv2int64(s[opt.colTm]);
             if (tm > tmprev)
@@ -448,14 +449,19 @@ void GraphPaint::paintEvent(QPaintEvent *event)
 
 void GraphPaint::wheelEvent(QWheelEvent *event)
 {
-    QPoint d = event->pixelDelta();
-    int x = static_cast<int>(scale_x)+d.x();
-    int y = static_cast<int>(scale_y)+d.y();
+    QPoint d = event->angleDelta();
+    int x = static_cast<int>(scale_x)+d.x() / 8;
+    int y = static_cast<int>(scale_y)+d.y() / 8;
     setScale(
         x > 0 ? x : 1,
         y > 0 ? y : 1,
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        event->pos().x(),
+        event->pos().y()
+#else
         event->position().x(),
         event->position().y()
+#endif
     );
 }
 

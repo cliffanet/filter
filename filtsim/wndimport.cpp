@@ -3,6 +3,7 @@
 
 #include <QFile>
 #include <QMessageBox>
+#include <QTextStream>
 
 void strDelQuot(QStringList &slist) {
     for (auto &s : slist) {
