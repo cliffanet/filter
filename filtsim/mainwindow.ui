@@ -630,7 +630,7 @@
             <rect>
              <x>10</x>
              <y>10</y>
-             <width>85</width>
+             <width>71</width>
              <height>22</height>
             </rect>
            </property>
@@ -728,7 +728,7 @@
             <rect>
              <x>10</x>
              <y>10</y>
-             <width>85</width>
+             <width>71</width>
              <height>22</height>
             </rect>
            </property>
@@ -826,7 +826,7 @@
             <rect>
              <x>10</x>
              <y>10</y>
-             <width>85</width>
+             <width>71</width>
              <height>22</height>
             </rect>
            </property>
@@ -855,10 +855,10 @@
             <number>1</number>
            </property>
            <property name="maximum">
-            <number>999</number>
+            <number>300</number>
            </property>
            <property name="value">
-            <number>100</number>
+            <number>50</number>
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -869,7 +869,7 @@
             <rect>
              <x>10</x>
              <y>10</y>
-             <width>85</width>
+             <width>71</width>
              <height>22</height>
             </rect>
            </property>
@@ -906,9 +906,9 @@
           <widget class="QLabel" name="labVMaxAccelSpeed">
            <property name="geometry">
             <rect>
-             <x>100</x>
+             <x>80</x>
              <y>10</y>
-             <width>51</width>
+             <width>91</width>
              <height>16</height>
             </rect>
            </property>
@@ -938,9 +938,9 @@
           <widget class="QLabel" name="labVMaxAccelAccel">
            <property name="geometry">
             <rect>
-             <x>200</x>
+             <x>190</x>
              <y>10</y>
-             <width>71</width>
+             <width>91</width>
              <height>16</height>
             </rect>
            </property>
@@ -964,10 +964,10 @@
             <number>1</number>
            </property>
            <property name="maximum">
-            <number>999</number>
+            <number>1000</number>
            </property>
            <property name="value">
-            <number>100</number>
+            <number>700</number>
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -992,9 +992,9 @@
           <widget class="QLabel" name="labVMaxAccelAcc2">
            <property name="geometry">
             <rect>
-             <x>300</x>
+             <x>290</x>
              <y>10</y>
-             <width>91</width>
+             <width>111</width>
              <height>16</height>
             </rect>
            </property>
@@ -1018,10 +1018,10 @@
             <number>1</number>
            </property>
            <property name="maximum">
-            <number>999</number>
+            <number>10000</number>
            </property>
            <property name="value">
-            <number>100</number>
+            <number>900</number>
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>

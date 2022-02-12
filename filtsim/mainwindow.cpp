@@ -242,25 +242,29 @@ void MainWindow::on_cmbMaxAccelType_currentIndexChanged(int index)
 void MainWindow::on_slMaxAccelSpeed_sliderMoved(int position)
 {
     Q_UNUSED(position)
-    double val = static_cast<double>(ui->slMaxAccelSpeed->value()) / 1000;
-    ui->labVMaxAccelSpeed->setText(QString::asprintf("%0.3f", val));
-    ui->chrt->setMaxAccelSpeed(val);
+    int v = ui->slMaxAccelSpeed->value();
+    ui->labVMaxAccelSpeed->setText(QString::asprintf("%d ед/с2", v));
+    ui->chrt->setMaxAccelSpeed(static_cast<double>(v) / 1000);
+    ui->slMaxAccelAccel->setMaximum(v*20);
+    on_slMaxAccelAccel_sliderMoved(0);
 }
 
 void MainWindow::on_slMaxAccelAccel_sliderMoved(int position)
 {
     Q_UNUSED(position)
-    double val = static_cast<double>(ui->slMaxAccelAccel->value()) / 1000000;
-    ui->labVMaxAccelAccel->setText(QString::asprintf("%0.6f", val));
-    ui->chrt->setMaxAccelAccel(val);
+    int v = ui->slMaxAccelAccel->value();
+    ui->labVMaxAccelAccel->setText(QString::asprintf("%d ед/с2", v));
+    ui->chrt->setMaxAccelAccel(static_cast<double>(v) / 1000000);
+    ui->slMaxAccelAcc2->setMaximum(v*20);
+    on_slMaxAccelAcc2_sliderMoved(0);
 }
 
 void MainWindow::on_slMaxAccelAcc2_sliderMoved(int position)
 {
     Q_UNUSED(position)
-    double val = static_cast<double>(ui->slMaxAccelAcc2->value()) / 1000000000;
-    ui->labVMaxAccelAcc2->setText(QString::asprintf("%0.9f", val));
-    ui->chrt->setMaxAccelAcc2(val);
+    int v = ui->slMaxAccelAcc2->value();
+    ui->labVMaxAccelAcc2->setText(QString::asprintf("%d ед/с3", v));
+    ui->chrt->setMaxAccelAcc2(static_cast<double>(v) / 1000000000);
 }
 
 void MainWindow::on_btnViewReset_clicked()
