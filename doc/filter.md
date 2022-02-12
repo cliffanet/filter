@@ -42,7 +42,7 @@
     }
 ```
 
-![](doc/filteravg.png)
+![](filteravg.png)
 
 value() = (val1 + val2 + ... + valn) / size
 
