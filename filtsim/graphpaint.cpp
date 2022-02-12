@@ -34,6 +34,7 @@ GraphPaint::GraphPaint(QWidget *parent)
     _info[DataAvg2].filter = &_filterAvg2;
     _info[DataLtSqrt].filter = &_filterLtSqrt;
     _info[DataMaxAccel].filter = &_filterMaxAccel;
+    _info[DataKalman].filter = &_filterKalman;
 
     _info[DataSrc].field    = "src";
     _info[DataTrue].field   = "true";
@@ -41,6 +42,7 @@ GraphPaint::GraphPaint(QWidget *parent)
     _info[DataAvg2].field   = "avg2";
     _info[DataLtSqrt].field = "ltsqrt";
     _info[DataMaxAccel].field="maxaccel";
+    _info[DataKalman].field = "kalman";
 }
 
 void GraphPaint::tick(double val, uint32_t tm)
@@ -234,6 +236,36 @@ void GraphPaint::setMaxAccelAcc2(double val)
 {
     _filterMaxAccel.set_max_acc2(val);
     updateFilter(DataMaxAccel);
+}
+
+void GraphPaint::setKalmanQ(double val)
+{
+    _filterKalman.set_q(val);
+    updateFilter(DataKalman);
+}
+
+void GraphPaint::setKalmanR(double val)
+{
+    _filterKalman.set_r(val);
+    updateFilter(DataKalman);
+}
+
+void GraphPaint::setKalmanF(double val)
+{
+    _filterKalman.set_f(val);
+    updateFilter(DataKalman);
+}
+
+void GraphPaint::setKalmanH(double val)
+{
+    _filterKalman.set_h(val);
+    updateFilter(DataKalman);
+}
+
+void GraphPaint::setKalmanCovar(double val)
+{
+    _filterKalman.set_covar(val);
+    updateFilter(DataKalman);
 }
 
 bool GraphPaint::dataLoadCSV(QString fname, const LoadOpt &opt)

@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     on_cmbAvg2Type_currentIndexChanged(ui->cmbAvg2Type->currentIndex());
     on_cmbLtSqrtType_currentIndexChanged(ui->cmbLtSqrtType->currentIndex());
     on_cmbMaxAccelType_currentIndexChanged(ui->cmbMaxAccelType->currentIndex());
+    on_cmbKalmanType_currentIndexChanged(ui->cmbKalmanType->currentIndex());
     on_slSigLevel_sliderMoved(0);
     on_slSigNoise_sliderMoved(0);
     on_slBufSize_sliderMoved(0);
@@ -38,8 +39,13 @@ MainWindow::MainWindow(QWidget *parent)
     on_slMaxAccelSpeed_sliderMoved(0);
     on_slMaxAccelAccel_sliderMoved(0);
     on_slMaxAccelAcc2_sliderMoved(0);
+    on_slKalmanQ_sliderMoved(0);
+    on_slKalmanR_sliderMoved(0);
+    on_slKalmanF_sliderMoved(0);
+    on_slKalmanH_sliderMoved(0);
+    on_slKalmanCovar_sliderMoved(0);
 
-    const QColor sigColor[] = { Qt::red, Qt::magenta, Qt::green, Qt::darkYellow, Qt::blue, { 75, 0, 130 } };
+    const QColor sigColor[] = { Qt::red, Qt::magenta, Qt::green, Qt::darkYellow, Qt::blue, { 75, 0, 130 }, { 139, 69, 19 } };
     for (auto id = GraphPaint::DataSrc; id < GraphPaint::DataCount; id = static_cast<GraphPaint::DataID>(id+1))
         if ((id >= 0) && (id < sizeof(sigColor)/sizeof(QColor)))
             ui->chrt->setDataColor(id, sigColor[id]);
@@ -265,6 +271,62 @@ void MainWindow::on_slMaxAccelAcc2_sliderMoved(int position)
     int v = ui->slMaxAccelAcc2->value();
     ui->labVMaxAccelAcc2->setText(QString::asprintf("%d ед/с3", v));
     ui->chrt->setMaxAccelAcc2(static_cast<double>(v) / 1000000000);
+}
+
+void MainWindow::on_cbKalmanVisible_stateChanged(int arg1)
+{
+    Q_UNUSED(arg1)
+    ui->chrt->setDataVisible(GraphPaint::DataKalman, ui->cbKalmanVisible->isChecked());
+}
+
+void MainWindow::on_cmbKalmanType_currentIndexChanged(int index)
+{
+    ui->chrt->setDrawType(
+        GraphPaint::DataKalman,
+        index == 1 ?
+            GraphPaint::DrawLine :
+            GraphPaint::DrawPoint
+    );
+}
+
+void MainWindow::on_slKalmanQ_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slKalmanQ->value()) / 10;
+    ui->labVKalmanQ->setText(QString::asprintf("%0.2f", val));
+    ui->chrt->setKalmanQ(val);
+}
+
+void MainWindow::on_slKalmanR_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slKalmanR->value()) / 10;
+    ui->labVKalmanR->setText(QString::asprintf("%0.2f", val));
+    ui->chrt->setKalmanR(val);
+}
+
+void MainWindow::on_slKalmanF_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slKalmanF->value()) / 100;
+    ui->labVKalmanF->setText(QString::asprintf("%0.2f", val));
+    ui->chrt->setKalmanF(val);
+}
+
+void MainWindow::on_slKalmanH_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slKalmanH->value()) / 100;
+    ui->labVKalmanH->setText(QString::asprintf("%0.2f", val));
+    ui->chrt->setKalmanH(val);
+}
+
+void MainWindow::on_slKalmanCovar_sliderMoved(int position)
+{
+    Q_UNUSED(position)
+    double val = static_cast<double>(ui->slKalmanCovar->value()) / 10;
+    ui->labVKalmanCovar->setText(QString::asprintf("%0.2f", val));
+    ui->chrt->setKalmanCovar(val);
 }
 
 void MainWindow::on_btnViewReset_clicked()

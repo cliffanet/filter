@@ -27,6 +27,8 @@ QVariant ModData::headerData(int section, Qt::Orientation orientation, int role)
                 case 2: return QString("Среднее арифметическое");
                 case 3: return QString("Среднее квадратическое");
                 case 4: return QString("Наименьшие квадраты");
+                case 5: return QString("Максимальное ускорение");
+                case 6: return QString("Фильтр Калмана");
             }
         else
         if (orientation == Qt::Vertical)

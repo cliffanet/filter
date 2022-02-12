@@ -12,12 +12,14 @@ class QMouseEvent;
 #include "../filtlib/filter_avg2.h"
 #include "../filtlib/filter_ltsqrt.h"
 #include "../filtlib/filter_maxaccel.h"
+#include "../filtlib/filter_kalman.h"
 
 typedef FilterBase<double> filtBase;
 typedef FilterAvg<double> filtAvg;
 typedef FilterAvg2<double> filtAvg2;
 typedef FilterLtSqrt<double> filtLtSqrt;
 typedef FilterMaxAccel<double> filtMaxAccel;
+typedef FilterKalman<double> filtKalman;
 
 #define GRAPH_PAINT_SRC_COUNT   5
 
@@ -32,6 +34,7 @@ public:
         DataAvg2,
         DataLtSqrt,
         DataMaxAccel,
+        DataKalman,
         DataCount
     } DataID;
 
@@ -90,10 +93,12 @@ public:
 
     void setDrawFlags(DrawFlags flag, bool set = true);
 
-    const RingData  & rdata()       const { return _data; }
-    const filtAvg   & filterAvg()   const { return _filterAvg; }
-    const filtAvg2  & filterAvg2()  const { return _filterAvg2; }
-    const filtLtSqrt& filterLtSqrt()const { return _filterLtSqrt; }
+    const RingData      & rdata()           const { return _data; }
+    const filtAvg       & filterAvg()       const { return _filterAvg; }
+    const filtAvg2      & filterAvg2()      const { return _filterAvg2; }
+    const filtLtSqrt    & filterLtSqrt()    const { return _filterLtSqrt; }
+    const filtMaxAccel  & filterMaxAccel()  const { return _filterMaxAccel; }
+    const filtKalman    & filterKalman()    const { return _filterKalman; }
 
     void updateFilter(DataID id);
     void resizeAvg(size_t sz);
@@ -102,6 +107,11 @@ public:
     void setMaxAccelSpeed(double val);
     void setMaxAccelAccel(double val);
     void setMaxAccelAcc2(double val);
+    void setKalmanQ(double val);
+    void setKalmanR(double val);
+    void setKalmanF(double val);
+    void setKalmanH(double val);
+    void setKalmanCovar(double val);
 
     double valDrawMin() { return y2value(static_cast<double>(size().height()-1)); }
     double valDrawMax() { return y2value(static_cast<double>(0)); }
@@ -139,6 +149,7 @@ private:
     filtAvg2 _filterAvg2;
     filtLtSqrt _filterLtSqrt;
     filtMaxAccel _filterMaxAccel;
+    filtKalman _filterKalman;
 
     template <typename T>
     inline T index2x(T index) {

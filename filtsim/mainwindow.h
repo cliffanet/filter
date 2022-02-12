@@ -49,6 +49,13 @@ private slots:
     void on_slMaxAccelSpeed_sliderMoved(int position);
     void on_slMaxAccelAccel_sliderMoved(int position);
     void on_slMaxAccelAcc2_sliderMoved(int position);
+    void on_cbKalmanVisible_stateChanged(int arg1);
+    void on_cmbKalmanType_currentIndexChanged(int index);
+    void on_slKalmanQ_sliderMoved(int position);
+    void on_slKalmanR_sliderMoved(int position);
+    void on_slKalmanF_sliderMoved(int position);
+    void on_slKalmanH_sliderMoved(int position);
+    void on_slKalmanCovar_sliderMoved(int position);
 
     void on_btnViewReset_clicked();
 
