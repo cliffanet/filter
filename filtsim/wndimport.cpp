@@ -17,6 +17,7 @@ WndImport::WndImport(QWidget *parent) :
     ui(new Ui::WndImport)
 {
     ui->setupUi(this);
+    setWindowTitle( "Параметры импорта" );
 }
 
 WndImport::~WndImport()
