@@ -36,6 +36,11 @@ FORMS += \
     wnddata.ui \
     wndimport.ui
 
+ICON = icon/icon.icns
+RC_FILE = filtsim.rc
+
+TARGET = "Аналитика фильтров"
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
