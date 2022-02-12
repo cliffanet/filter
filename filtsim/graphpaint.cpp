@@ -17,8 +17,8 @@ static const QString csv2str(const QString &str) {
             str;
 }
 
-static uint csv2uint(const QString &str) {
-    return csv2str(str).toUInt();
+static int64_t csv2int64(const QString &str) {
+    return csv2str(str).toLongLong();
 }
 
 static double csv2double(const QString &str) {
@@ -268,7 +268,7 @@ bool GraphPaint::dataLoadCSV(QString fname, const LoadOpt &opt)
     for (const auto &s : slst) {
         pnt_t p = { 0 };
         if (opt.colTm >= 0) {
-            uint tm = csv2uint(s[opt.colTm]);
+            int64_t tm = csv2int64(s[opt.colTm]);
             if (tm > tmprev)
                 p.tdiff = tm - tmprev;
             tmprev = tm;
@@ -310,7 +310,7 @@ bool GraphPaint::dataSaveCSV(QString fname, uint8_t floatnum)
 
     const auto fmt = QString("%0."+QString::number(floatnum)+"f").toLocal8Bit();
 
-    int64_t tm = _data.size() > 0 ? -1*_data.front().tdiff : 0;
+    int64_t tm = _data.size() > 0 ? static_cast<int64_t>(-1)*_data.front().tdiff : 0;
     for (const auto &d : _data) {
         tm += d.tdiff;
         if (!saveFile.write(QString("" + QString::number(tm) + ";").toLocal8Bit().data()))
